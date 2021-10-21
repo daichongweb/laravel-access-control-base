@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Data\ProviderRedis;
+use App\Data\EnterpriseRedis;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
@@ -19,13 +19,13 @@ class ServiceController extends Controller
      */
     public function index(): JsonResponse
     {
-        $token = ProviderRedis::get();
+        $token = EnterpriseRedis::get();
         if (!$token) {
             $providerService = new ProviderService();
             $tokenData = $providerService->getProviderToken();
             $token = $tokenData['provider_access_token'];
             $expiresIn = $tokenData['expires_in'];
-            ProviderRedis::set($token, $expiresIn);
+            EnterpriseRedis::set($token, $expiresIn);
         }
         return ResponseHelper::success($token);
     }

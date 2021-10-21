@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\CustomerGroupController;
+use App\Http\Controllers\Api\EnterpriseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,4 +19,8 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::get('/get_token', [ServiceController::class, 'index']);
+Route::get('/get_token', [EnterpriseController::class, 'token']);
+
+Route::prefix('group')->group(function () {
+    Route::get('/list', [CustomerGroupController::class, 'list']);
+});

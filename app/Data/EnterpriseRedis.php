@@ -5,13 +5,13 @@ namespace App\Data;
 use Illuminate\Support\Facades\Redis;
 
 /**
- * 服务商token存储
+ * 企业token存储
  */
-class ProviderRedis
+class EnterpriseRedis
 {
     private static function key()
     {
-        return 'provider_access_token';
+        return 'enterprise_access_token';
     }
 
     public static function set($token, $expiresIn)
