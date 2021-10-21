@@ -8,6 +8,6 @@
     <title>企业微信授权</title>
 </head>
 <body>
-<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wwf1f3d2fd27f4e563&redirect_uri=http%3A%2F%2Fqunmishu.tebaobao.vip&response_type=code&scope=snsapi_base&state=#wechat_redirect">授权</a>
+<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wwf1f3d2fd27f4e563&redirect_uri=http%3A%2F%2Fqunmishu.tebaobao.vip/auth&response_type=code&scope=snsapi_base&state=#wechat_redirect">授权</a>
 </body>
 </html>
