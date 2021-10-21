@@ -11,7 +11,7 @@ class CustomerGroupService
 {
     private $group_chat = 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/groupchat/list?access_token=%s';
 
-    private $group_info = 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/get?access_token=%s&external_userid=%s&cursor=%s';
+    private $group_info = 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/groupchat/get?access_token=%s';
 
     public $token;
 
@@ -36,17 +36,20 @@ class CustomerGroupService
 
     /**
      * 客户群详情
-     * @param $userId
-     * @param string $cursor
+     * @param $chatId
      * @return false|mixed|string|null
      * @throws ApiException
      */
-    public function groupInfo($userId, string $cursor = '')
+    public function groupInfo($chatId)
     {
         $curl = new CurlService();
-        $curl->setUrl(sprintf($this->group_info, $this->token, $userId, $cursor));
-        $curl->setMethod('get');
-        $curl->setData([]);
+        $curl->setUrl(sprintf($this->group_info, $this->token));
+        $curl->setMethod('post');
+        $curl->setIsJson(true);
+        $curl->setData([
+            "chat_id" => $chatId,
+            "need_name" => 1
+        ]);
         $curl->setToArray(true);
         return $curl->request();
     }

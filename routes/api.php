@@ -23,4 +23,5 @@ Route::get('/get_token', [EnterpriseController::class, 'token']);
 
 Route::prefix('group')->group(function () {
     Route::get('/list', [CustomerGroupController::class, 'list']);
+    Route::get('/info', [CustomerGroupController::class, 'info']);
 });

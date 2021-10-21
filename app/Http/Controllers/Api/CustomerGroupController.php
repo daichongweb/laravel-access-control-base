@@ -8,6 +8,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Services\CustomerGroupService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * 客户群相关接口
@@ -30,5 +31,16 @@ class CustomerGroupController extends Controller
     public function list(): JsonResponse
     {
         return ResponseHelper::success($this->service->groupList());
+    }
+
+    /**
+     * 群详情
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ApiException
+     */
+    public function info(Request $request): JsonResponse
+    {
+        return ResponseHelper::success($this->service->groupInfo($request->get('chat_id')));
     }
 }
