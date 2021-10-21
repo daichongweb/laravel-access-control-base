@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\EnterpriseRedis;
 use App\Exceptions\ApiException;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class AuthController extends Controller
         $data = [];
         if ($code = $request->get('code')) {
             $service = new AuthService();
+            $service->token = EnterpriseRedis::get();
             $data = $service->user($code);
             var_dump($data);
         }
