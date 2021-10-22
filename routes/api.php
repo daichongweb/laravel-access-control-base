@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\CustomerGroupController;
 use App\Http\Controllers\Api\EnterpriseController;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/get_token', [EnterpriseController::class, 'token']);
 
-Route::prefix('group')->group(function () {
+//客户群相关
+Route::prefix('customer-group')->group(function () {
     Route::get('/list', [CustomerGroupController::class, 'list']);
     Route::get('/info', [CustomerGroupController::class, 'info']);
+});
+
+// 客户相关
+Route::prefix('customer')->group(function () {
+    Route::get('/info', [CustomerController::class, 'getUserInfo']);
 });

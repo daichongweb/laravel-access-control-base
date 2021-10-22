@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\EnterpriseRedis;
 use App\Exceptions\ApiException;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
@@ -21,7 +20,7 @@ class AuthController extends Controller
         $data = [];
         if ($code = $request->get('code')) {
             $service = new AuthService();
-            $service->token = 'DUKxpdTlyma_7E97_sJdIuz6vbu074ULsZLjvej14id6AqJ3oUVx8dMt8Ez_zZ4ZQTV0NlU4Po-8-fixCnOpLPmeQ94T0wjQ2ExMPwXw7aB10Ba05p8EccbrAkbpC_EprfC_nSVcJifpdi99rDTi4rg-l_nrJ_At_fq9atx9gXEFRW_DdzcOgbeL1KX-9nryhhFW_zPSYXFU7BUk28ZY1g';
+            $service->token = 'e6l8vHh8nG6L-DmAjINWuR5CIGApqMsQD5u1qQjMwzyB1d-clSNsgkMoxHXceLJ_fPVWk9b4-G4uaGe_7rsSQ_Lus25Kj2jGfqRBk4JINVFkKcyNQPWkPKXXZYua0HZA9YmyaDPYA1QxAVnyNnGKAHKn3xv0iWjzjCWZ6vuvl7buayq5xFBT1pfG8WQppY07EjucqCtIirPGBNF02ap8sg';
             $data = $service->user($code);
             var_dump($data);
         }
