@@ -19,15 +19,18 @@ class CustomerGroupService
      * 获取客户所有群ID
      * @throws ApiException
      */
-    public function groupList($cursor = '')
+    public function groupList($memberId = '', $limit = 10, $cursor = '')
     {
         $curl = new CurlService();
         $curl->setUrl(sprintf($this->group_chat, $this->token));
         $curl->setMethod('post');
         $curl->setData([
             'status_filter' => 0,
+            'owner_filter' => [
+                'userid_list' => [$memberId]
+            ],
             'cursor' => $cursor,
-            'limit' => 10
+            'limit' => $limit
         ]);
         $curl->setIsJson(true);
         $curl->setToArray(true);

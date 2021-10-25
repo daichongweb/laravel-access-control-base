@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Manager;
 
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;

@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\CustomerGroupController;
-use App\Http\Controllers\Api\EnterpriseController;
-use App\Http\Controllers\Api\LoginController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Manager\CustomerController;
+use App\Http\Controllers\Manager\CustomerGroupController;
+use App\Http\Controllers\Manager\EnterpriseController;
+use App\Http\Controllers\Manager\LoginController;
+use App\Http\Controllers\Manager\MemberController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/info', [CustomerController::class, 'getUserInfo']);
     });
 
+    // 企业成员相关
+    Route::prefix('member')->group(function () {
+        Route::get('/follow_list', [MemberController::class, 'list']);
+    });
 });
-
 
 Route::post('/login', [LoginController::class, 'login']);

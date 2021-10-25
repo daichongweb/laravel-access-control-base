@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Manager;
 
 use App\Data\EnterpriseRedis;
 use App\Exceptions\ApiException;
@@ -28,9 +28,9 @@ class CustomerGroupController extends Controller
      * 群列表
      * @throws ApiException
      */
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        return ResponseHelper::success($this->service->groupList());
+        return ResponseHelper::success($this->service->groupList($request->get('member_id'), $request->get('limit', 10), $request->get('cursor')));
     }
 
     /**
