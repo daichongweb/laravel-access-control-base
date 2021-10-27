@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // 企业成员相关
     Route::prefix('member')->group(function () {
         Route::get('/follow-list', [MemberController::class, 'list']);
+        Route::post('/create', [MemberController::class, 'create']);
     });
 });
 
