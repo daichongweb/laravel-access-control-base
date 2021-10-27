@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('member')->group(function () {
         Route::get('/follow-list', [MemberController::class, 'list']);
         Route::post('/create', [MemberController::class, 'create']);
+        Route::post('/bind', [MemberController::class, 'bind']);
     });
 });
 

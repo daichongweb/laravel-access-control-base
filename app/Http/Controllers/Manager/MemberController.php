@@ -54,4 +54,25 @@ class MemberController extends Controller
         }
         return ResponseHelper::success();
     }
+
+    /**
+     * 绑定企业微信user_id
+     * @throws ApiException
+     */
+    public function bind(MemberRequest $request): JsonResponse
+    {
+        $request->validate('bind');
+        $member = MemberModel::query()
+            ->where('name', $request->post('name'))
+            ->where('enterprise_id', $request->post('enterprise_id'))
+            ->first();
+        if (!$member) {
+            throw new ApiException('成员不存在');
+        }
+        $member->corp_user_id = $request->post('corp_user_id');
+        if (!$member->save()) {
+            throw new ApiException('绑定失败');
+        }
+        return ResponseHelper::success();
+    }
 }
