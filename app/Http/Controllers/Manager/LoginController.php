@@ -36,7 +36,7 @@ class LoginController extends Controller
         if (!password_verify($request->post('password'), $loginUser->password)) {
             throw new ApiException('账号或密码错误');
         }
-        $token = $loginUser->createToken('login');
+        $token = $loginUser->createToken('admin');
         return ResponseHelper::success($token->plainTextToken);
     }
 }

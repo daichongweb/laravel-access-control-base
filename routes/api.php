@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 //
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/get_token', [EnterpriseController::class, 'token']);
-
+    Route::prefix('enterprise')->group(function () {
+        Route::get('/get-token', [EnterpriseController::class, 'token']);
+        Route::post('/create', [EnterpriseController::class, 'create']);
+    });
     //客户群相关
     Route::prefix('customer-group')->group(function () {
         Route::get('/list', [CustomerGroupController::class, 'list']);
@@ -34,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // 企业成员相关
     Route::prefix('member')->group(function () {
-        Route::get('/follow_list', [MemberController::class, 'list']);
+        Route::get('/follow-list', [MemberController::class, 'list']);
     });
 });
 
