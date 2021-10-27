@@ -43,6 +43,9 @@ class MemberController extends Controller
     public function create(MemberRequest $request): JsonResponse
     {
         $request->validate('create');
+        if (!$request->user()->tokenCan('member:create')) {
+            throw new ApiException('无权限操作');
+        }
         $currentUser = $request->user();
         $pid = $currentUser->id;
         if ($currentUser->type == User::ADMIN) {
