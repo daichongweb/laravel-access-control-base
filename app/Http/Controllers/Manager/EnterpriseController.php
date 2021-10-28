@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Enums\AuthEnum;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
@@ -32,7 +33,7 @@ class EnterpriseController extends Controller
     public function create(EnterpriseRequest $enterpriseRequest): JsonResponse
     {
         $enterpriseRequest->validate();
-        if (!$enterpriseRequest->user()->tokenCan('enterprise:create')) {
+        if (!$enterpriseRequest->user()->tokenCan(AuthEnum::ENTERPRISE_CREATE)) {
             throw new ApiException('无权限操作');
         }
         $model = EnterpriseModel::query()->create($enterpriseRequest->all());

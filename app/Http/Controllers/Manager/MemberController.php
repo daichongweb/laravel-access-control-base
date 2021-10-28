@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Data\EnterpriseRedis;
+use App\Enums\AuthEnum;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
@@ -43,7 +44,7 @@ class MemberController extends Controller
     public function create(MemberRequest $request): JsonResponse
     {
         $request->validate('create');
-        if (!$request->user()->tokenCan('member:create')) {
+        if (!$request->user()->tokenCan(AuthEnum::MEMBER_CREATE)) {
             throw new ApiException('无权限操作');
         }
         $currentUser = $request->user();
