@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-
 /**
  * 登录验证器
  */
@@ -13,18 +11,18 @@ class LoginRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'mobile_phone' => 'required|min:11',
+            'name' => 'required|min:4',
             'email' => 'required|email',
             'password' => 'required',
-            'type' => 'required|in:mobileLogin,emailLogin'
+            'type' => 'required|in:nameLogin,emailLogin'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'mobile_phone.required' => '手机号不能为空',
-            'mobile_phone.min' => '手机号格式错误',
+            'name.required' => '账号不能为空',
+            'name.min' => '账号格式错误',
             'email.required' => '邮箱不能为空',
             'email.email' => '邮箱格式错误',
             'password.required' => '密码不能为空',
@@ -34,7 +32,7 @@ class LoginRequest extends BaseRequest
     }
 
     public $scenes = [
-        'mobileLogin' => ['mobile_phone'],
+        'nameLogin' => ['name'],
         'emailLogin' => ['email']
     ];
 }

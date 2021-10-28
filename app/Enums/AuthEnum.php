@@ -46,4 +46,32 @@ class AuthEnum
      */
     const MEMBER_BIND = 'member:bind';
 
+    /**
+     * 企业一般成员
+     * @return string[]
+     */
+    public static function enterprise_ordinary(): array
+    {
+        return [
+            self::ENTERPRISE_TOKEN,
+            self::CUSTOMER_GROUP_INFO,
+            self::CUSTOMER_GROUP_LIST,
+            self::MEMBER_BIND,
+            self::CUSTOMER_INFO
+        ];
+    }
+
+    /**
+     * 企业管理员
+     * @return array
+     */
+    public static function enterprise_admin(): array
+    {
+        return [
+            self::enterprise_ordinary(),
+            self::ENTERPRISE_CREATE,
+            self::MEMBER_CREATE,
+            self::MEMBER_FOLLOW_LIST
+        ];
+    }
 }

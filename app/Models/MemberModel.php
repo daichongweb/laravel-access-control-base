@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class MemberModel extends Model
+class MemberModel extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'members';
 
@@ -25,4 +28,9 @@ class MemberModel extends Model
         'email',
         'password'
     ];
+
+    public function enterprise(): HasOne
+    {
+        return $this->hasOne(EnterpriseModel::class, 'id', 'enterprise_id');
+    }
 }

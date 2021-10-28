@@ -42,4 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-Route::post('/login', [LoginController::class, 'login']);
+// 超级管理员登录
+Route::post('/admin-login', [LoginController::class, 'adminLogin']);
+
+// 企业管理员登录
+Route::post('/member-login', [LoginController::class, 'memberLogin']);
