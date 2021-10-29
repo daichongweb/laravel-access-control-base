@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('enterprise')->group(function () {
         Route::get('/get-token', [EnterpriseController::class, 'token']);
         Route::post('/create', [EnterpriseController::class, 'create']);
+        Route::get('/list', [EnterpriseController::class, 'list']);
     });
     //客户群相关
     Route::prefix('customer-group')->group(function () {

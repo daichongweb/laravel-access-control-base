@@ -51,7 +51,7 @@ class LoginController extends Controller
     {
         $type = $request->post('type', 'nameLogin');
         $request->validate($type);
-        $user = MemberModel::query()->with('enterprise');
+        $user = MemberModel::query();
         if ($type == 'nameLogin') {
             $user->where('name', $request->post('name'));
         } elseif ($type == 'emailLogin') {
@@ -66,6 +66,6 @@ class LoginController extends Controller
             throw new ApiException('账号或密码错误');
         }
         $token = $loginUser->createToken('member');
-        return ResponseHelper::success(['token' => $token->plainTextToken, 'enterprise_key' => $loginUser->enterprise->key]);
+        return ResponseHelper::success(['token' => $token->plainTextToken]);
     }
 }

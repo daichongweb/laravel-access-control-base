@@ -22,6 +22,12 @@ class EnterpriseModel extends Model
     public $timestamps = true;
 
     /**
+     * 字段隐藏
+     * @var string[]
+     */
+    protected $hidden = ['corp_secret', 'app_secret'];
+
+    /**
      * 填充字段
      * @var string[]
      */
