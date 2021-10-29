@@ -58,4 +58,23 @@ class EnterpriseController extends Controller
         }
         return ResponseHelper::success(EnterpriseModel::query()->where('name', $currentUser->name)->get());
     }
+
+    /**
+     * 选择企业
+     * @throws ApiException
+     */
+    public function select(Request $request): JsonResponse
+    {
+        $key = $request->post('key');
+        $enterprise = EnterpriseModel::query()->where('key', $key)->first();
+        if (!$enterprise) {
+            throw new ApiException('企业不存在');
+        }
+        $currentUser = $request->user();
+        if ($currentUser->type != User::ADMIN && $currentUser->enterprise_id != $enterprise->id) {
+            throw new ApiException('没有操作权限');
+        }
+        session('member_' . $currentUser->id, $enterprise);
+        return ResponseHelper::success();
+    }
 }
