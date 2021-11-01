@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\EnterpriseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * 企业相关接口控制器
@@ -22,10 +23,18 @@ class EnterpriseController extends Controller
      * 获取企业微信access-token
      * @throws ApiException
      */
-    public function token(): JsonResponse
+    public function token(Request $request): JsonResponse
     {
+        $key = $request->header('key');
+        if (!$key) {
+            throw new ApiException('企业标识错误');
+        }
+        $enterprise = EnterpriseModel::query()->where('key', $key)->first();
+        if (!$enterprise) {
+            throw new ApiException('企业信息获取失败，请重新登录');
+        }
         $service = new EnterpriseService();
-        return ResponseHelper::success(['access_token' => $service->getToken()]);
+        return ResponseHelper::success(['access_token' => $service->getToken($enterprise)]);
     }
 
     /**

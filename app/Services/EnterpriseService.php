@@ -17,13 +17,13 @@ class EnterpriseService
      * @return false|mixed|string|null
      * @throws ApiException
      */
-    public function getToken()
+    public function getToken($enterprise)
     {
         $token = EnterpriseRedis::get();
         if (!$token) {
             $curlService = new CurlService();
             $curlService->setToArray(true);
-            $curlService->setUrl(sprintf($this->get_token, env('CORPID'), env('PROVIDERSERET')));
+            $curlService->setUrl(sprintf($this->get_token, $enterprise->corp_id, $enterprise->corp_secret));
             $curlService->setMethod('get');
             $curlService->setData([]);
             $response = $curlService->request();

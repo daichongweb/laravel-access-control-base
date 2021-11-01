@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Models\EnterpriseModel;
 use App\Models\MemberModel;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -66,6 +67,10 @@ class LoginController extends Controller
             throw new ApiException('账号或密码错误');
         }
         $token = $loginUser->createToken('member');
-        return ResponseHelper::success(['token' => $token->plainTextToken]);
+        $enterprise = EnterpriseModel::query()->where('id', $loginUser->enterprise_id)->first();
+        if (!$enterprise) {
+            throw new ApiException('未绑定企业');
+        }
+        return ResponseHelper::success(['token' => $token->plainTextToken, 'key' => $enterprise->key]);
     }
 }
