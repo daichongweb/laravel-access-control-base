@@ -38,6 +38,8 @@ class LoginController extends Controller
         if (!password_verify($request->post('password'), $loginUser->password)) {
             throw new ApiException('账号或密码错误');
         }
+        // 先撤销所有令牌
+        $loginUser->tokens()->delete();
         $token = $loginUser->createToken('admin');
         return ResponseHelper::success($token->plainTextToken);
     }
@@ -66,6 +68,8 @@ class LoginController extends Controller
         if (!password_verify($request->post('password'), $loginUser->password)) {
             throw new ApiException('账号或密码错误');
         }
+        // 先撤销所有令牌
+        $loginUser->tokens()->delete();
         $token = $loginUser->createToken('member');
         $enterprise = EnterpriseModel::query()->where('id', $loginUser->enterprise_id)->first();
         if (!$enterprise) {
