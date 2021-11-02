@@ -29,6 +29,8 @@ class MemberModel extends Authenticatable
         'password'
     ];
 
+    protected $hidden = ['password'];
+
     public function enterprise(): HasOne
     {
         return $this->hasOne(EnterpriseModel::class, 'id', 'enterprise_id');

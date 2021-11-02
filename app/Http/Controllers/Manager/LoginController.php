@@ -75,6 +75,6 @@ class LoginController extends Controller
         if (!$enterprise) {
             throw new ApiException('未绑定企业');
         }
-        return ResponseHelper::success(['token' => $token->plainTextToken, 'key' => $enterprise->key]);
+        return ResponseHelper::success(['token' => $token->plainTextToken, 'key' => $enterprise->key, 'user' => $loginUser]);
     }
 }
