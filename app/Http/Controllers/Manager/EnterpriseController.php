@@ -12,7 +12,6 @@ use App\Models\User;
 use App\Services\EnterpriseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 /**
  * 企业相关接口控制器

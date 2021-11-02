@@ -18,10 +18,10 @@ class CustomerGroupController extends Controller
 
     private $service;
 
-    public function __construct(CustomerGroupService $customerGroupService)
+    public function __construct(CustomerGroupService $customerGroupService, Request $request)
     {
         $this->service = $customerGroupService;
-        $this->service->token = EnterpriseRedis::get();
+        $this->service->token = EnterpriseRedis::get($request->header('key'));
     }
 
     /**

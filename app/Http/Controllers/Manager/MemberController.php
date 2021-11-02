@@ -12,6 +12,7 @@ use App\Models\MemberModel;
 use App\Models\User;
 use App\Services\MemberService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * 企业服务人员管理
@@ -20,10 +21,10 @@ class MemberController extends Controller
 {
     public $service;
 
-    public function __construct(MemberService $memberServices)
+    public function __construct(MemberService $memberServices, Request $request)
     {
         $this->service = $memberServices;
-        $this->service->token = EnterpriseRedis::get();
+        $this->service->token = EnterpriseRedis::get($request->header('key'));
     }
 
     /**

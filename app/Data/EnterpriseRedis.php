@@ -9,18 +9,18 @@ use Illuminate\Support\Facades\Redis;
  */
 class EnterpriseRedis
 {
-    private static function key()
+    private static function key($key): string
     {
-        return 'enterprise_access_token';
+        return 'enterprise_access_token:' . $key;
     }
 
-    public static function set($token, $expiresIn)
+    public static function set($key, $token, $expiresIn)
     {
-        return Redis::setex(self::key(), $expiresIn, $token);
+        return Redis::setex(self::key($key), $expiresIn, $token);
     }
 
-    public static function get()
+    public static function get($key)
     {
-        return Redis::get(self::key());
+        return Redis::get(self::key($key));
     }
 }

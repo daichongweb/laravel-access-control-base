@@ -19,7 +19,7 @@ class EnterpriseService
      */
     public function getToken($enterprise)
     {
-        $token = EnterpriseRedis::get();
+        $token = EnterpriseRedis::get($enterprise->key);
         if (!$token) {
             $curlService = new CurlService();
             $curlService->setToArray(true);
@@ -31,7 +31,7 @@ class EnterpriseService
                 throw new ApiException($response['errmsg'], $response['errcode']);
             }
             $token = $response['access_token'];
-            EnterpriseRedis::set($token, $response['expires_in']);
+            EnterpriseRedis::set($enterprise->key, $token, $response['expires_in']);
         }
 
         return $token;

@@ -20,27 +20,30 @@ use Illuminate\Support\Facades\Route;
 //
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('enterprise')->group(function () {
-        Route::get('/get-token', [EnterpriseController::class, 'token']);
+        Route::get('/get-token', [EnterpriseController::class, 'token'])->middleware('enterprise.key.valid');
         Route::post('/create', [EnterpriseController::class, 'create']);
         Route::get('/list', [EnterpriseController::class, 'list']);
-        Route::post('/select', [EnterpriseController::class, 'select']);
-    });
-    //客户群相关
-    Route::prefix('customer-group')->group(function () {
-        Route::get('/list', [CustomerGroupController::class, 'list']);
-        Route::get('/info', [CustomerGroupController::class, 'info']);
+        Route::post('/select', [EnterpriseController::class, 'select'])->middleware('enterprise.key.valid');
     });
 
-    // 客户相关
-    Route::prefix('customer')->group(function () {
-        Route::get('/info', [CustomerController::class, 'getUserInfo']);
-    });
+    Route::middleware('enterprise.key.valid')->group(function () {
+        //客户群相关
+        Route::prefix('customer-group')->group(function () {
+            Route::get('/list', [CustomerGroupController::class, 'list']);
+            Route::get('/info', [CustomerGroupController::class, 'info']);
+        });
 
-    // 企业成员相关
-    Route::prefix('member')->group(function () {
-        Route::get('/follow-list', [MemberController::class, 'list']);
-        Route::post('/create', [MemberController::class, 'create']);
-        Route::post('/bind', [MemberController::class, 'bind']);
+        // 客户相关
+        Route::prefix('customer')->group(function () {
+            Route::get('/info', [CustomerController::class, 'getUserInfo']);
+        });
+
+        // 企业成员相关
+        Route::prefix('member')->group(function () {
+            Route::get('/follow-list', [MemberController::class, 'list']);
+            Route::post('/create', [MemberController::class, 'create']);
+            Route::post('/bind', [MemberController::class, 'bind']);
+        });
     });
 });
 

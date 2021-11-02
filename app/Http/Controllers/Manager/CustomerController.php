@@ -18,10 +18,10 @@ class CustomerController extends Controller
 
     private $service;
 
-    public function __construct(CustomerService $customerService)
+    public function __construct(CustomerService $customerService, Request $request)
     {
         $this->service = $customerService;
-        $this->service->token = EnterpriseRedis::get();
+        $this->service->token = EnterpriseRedis::get($request->header('key'));
     }
 
     /**
