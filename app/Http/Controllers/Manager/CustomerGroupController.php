@@ -6,6 +6,7 @@ use App\Data\EnterpriseRedis;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Jobs\GroupChatJob;
 use App\Services\CustomerGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -52,6 +53,8 @@ class CustomerGroupController extends Controller
      */
     public function info(Request $request): JsonResponse
     {
-        return ResponseHelper::success($this->service->groupInfo($request->get('chat_id')));
+        $info = $this->service->groupInfo($request->get('chat_id'));
+        GroupChatJob::dispatch($request->user(), $info);
+        return ResponseHelper::success($info);
     }
 }
