@@ -30,7 +30,18 @@ class CustomerGroupController extends Controller
      */
     public function list(Request $request): JsonResponse
     {
-        return ResponseHelper::success($this->service->groupList($request->get('member_id'), $request->get('limit', 10), $request->get('cursor')));
+        $corpUserId = $request->user()->corp_user_id;
+        if (!$corpUserId) {
+            throw new ApiException('请先绑定企业微信');
+        }
+        $groupChatList = $this->service->groupList($corpUserId, $request->get('limit', 10), $request->get('cursor'));
+        if ($groupChatList) {
+            foreach ($groupChatList['group_chat_list'] as &$chat) {
+                $chatInfo = $this->service->groupInfo($chat['chat_id'], 0);
+                $chat['name'] = $chatInfo['group_chat']['name'] ?: '未命名';
+            }
+        }
+        return ResponseHelper::success($groupChatList);
     }
 
     /**

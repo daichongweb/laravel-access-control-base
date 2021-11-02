@@ -43,7 +43,7 @@ class CustomerGroupService
      * @return false|mixed|string|null
      * @throws ApiException
      */
-    public function groupInfo($chatId)
+    public function groupInfo($chatId, $needName = 1)
     {
         $curl = new CurlService();
         $curl->setUrl(sprintf($this->group_info, $this->token));
@@ -51,7 +51,7 @@ class CustomerGroupService
         $curl->setIsJson(true);
         $curl->setData([
             "chat_id" => $chatId,
-            "need_name" => 1
+            "need_name" => $needName
         ]);
         $curl->setToArray(true);
         return $curl->request();
