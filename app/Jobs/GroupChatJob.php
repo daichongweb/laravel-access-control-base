@@ -47,7 +47,7 @@ class GroupChatJob implements ShouldQueue
             $memberList = $groupChat['member_list'];
             $adminList = $groupChat['admin_list'];
             // 同步信息
-            ChatGroupInfosModel::query()->updateOrCreate([
+            $infoModel = ChatGroupInfosModel::query()->updateOrCreate([
                 'chat_id' => $groupChat['chat_id'],
                 'enterprise_id' => $enterprise_id,
                 'member_id' => $member_id
@@ -77,7 +77,8 @@ class GroupChatJob implements ShouldQueue
                         'join_time' => $member['join_time'],
                         'is_admin' => (int)in_array($member['userid'], array_column($adminList, 'userid')),
                         'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s')
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'info_id' => $infoModel->id
                     ]);
                 }
                 ChatGroupMembersModel::query()->delete();
