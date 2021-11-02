@@ -2,6 +2,9 @@
 
 namespace App\Data;
 
+use App\Exceptions\ApiException;
+use App\Models\EnterpriseModel;
+use App\Services\EnterpriseService;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -19,8 +22,16 @@ class EnterpriseRedis
         return Redis::setex(self::key($key), $expiresIn, $token);
     }
 
+    /**
+     * @throws ApiException
+     */
     public static function get($key)
     {
-        return Redis::get(self::key($key));
+        $token = Redis::get(self::key($key));
+        if (!$token) {
+            $enterprise = EnterpriseModel::query()->where('key', $key)->first();
+            return (new  EnterpriseService())->getToken($enterprise);
+        }
+        return $token;
     }
 }
