@@ -30,7 +30,11 @@ class EnterpriseRedis
         $token = Redis::get(self::key($key));
         if (!$token) {
             $enterprise = EnterpriseModel::query()->where('key', $key)->first();
-            return (new  EnterpriseService())->getToken($enterprise);
+            if (!$enterprise) {
+                throw new ApiException('企业信息获取失败，请重新登录');
+            }
+            $service = new EnterpriseService();
+            return $service->getToken($enterprise);
         }
         return $token;
     }

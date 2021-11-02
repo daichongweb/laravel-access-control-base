@@ -19,21 +19,17 @@ class EnterpriseService
      */
     public function getToken($enterprise)
     {
-        $token = EnterpriseRedis::get($enterprise->key);
-        if (!$token) {
-            $curlService = new CurlService();
-            $curlService->setToArray(true);
-            $curlService->setUrl(sprintf($this->get_token, $enterprise->corp_id, $enterprise->corp_secret));
-            $curlService->setMethod('get');
-            $curlService->setData([]);
-            $response = $curlService->request();
-            if ($response['errcode']) {
-                throw new ApiException($response['errmsg'], $response['errcode']);
-            }
-            $token = $response['access_token'];
-            EnterpriseRedis::set($enterprise->key, $token, $response['expires_in']);
+        $curlService = new CurlService();
+        $curlService->setToArray(true);
+        $curlService->setUrl(sprintf($this->get_token, $enterprise->corp_id, $enterprise->corp_secret));
+        $curlService->setMethod('get');
+        $curlService->setData([]);
+        $response = $curlService->request();
+        if ($response['errcode']) {
+            throw new ApiException($response['errmsg'], $response['errcode']);
         }
-
+        $token = $response['access_token'];
+        EnterpriseRedis::set($enterprise->key, $token, $response['expires_in']);
         return $token;
     }
 }
