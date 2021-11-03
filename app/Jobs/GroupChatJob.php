@@ -81,7 +81,7 @@ class GroupChatJob implements ShouldQueue
                         'info_id' => $infoModel->id
                     ]);
                 }
-                ChatGroupMembersModel::query()->delete();
+                ChatGroupMembersModel::query()->where('info_id', $infoModel->id)->delete();
                 ChatGroupMembersModel::query()->insert($members);
             }
         }
