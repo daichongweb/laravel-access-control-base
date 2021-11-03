@@ -7,6 +7,8 @@ use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Jobs\GroupChatJob;
+use App\Models\ChatGroupInfosModel;
+use App\Models\ChatGroupMembersModel;
 use App\Services\CustomerGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -53,8 +55,25 @@ class CustomerGroupController extends Controller
      */
     public function info(Request $request): JsonResponse
     {
+        $chatId = $request->get('chat_id');
+        $info = ChatGroupInfosModel::query()->where('chat_id', $chatId)->value('id');
+        if (!$info) {
+            throw new ApiException('请先同步群详情');
+        }
+        $list = ChatGroupMembersModel::query()->where('info_id', $info)->simplePaginate(10);
+        return ResponseHelper::success($list);
+    }
+
+    /**
+     * 同步群详情
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ApiException
+     */
+    public function syncInfo(Request $request): JsonResponse
+    {
         $info = $this->service->groupInfo($request->get('chat_id'));
         GroupChatJob::dispatch($request->user(), $info);
-        return ResponseHelper::success($info);
+        return ResponseHelper::success();
     }
 }
