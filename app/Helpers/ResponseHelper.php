@@ -27,4 +27,12 @@ class ResponseHelper
             'message' => $message
         ]);
     }
+
+    public static function auto($bool): JsonResponse
+    {
+        if ($bool) {
+            return self::success();
+        }
+        return self::error();
+    }
 }

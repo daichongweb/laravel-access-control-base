@@ -5,6 +5,7 @@ use App\Http\Controllers\Manager\CustomerGroupController;
 use App\Http\Controllers\Manager\EnterpriseController;
 use App\Http\Controllers\Manager\LoginController;
 use App\Http\Controllers\Manager\MemberController;
+use App\Http\Controllers\Manager\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +46,13 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/create', [MemberController::class, 'create']);
             Route::post('/bind', [MemberController::class, 'bind']);
         });
+    });
+
+    // 素材标签
+    Route::prefix('tag')->group(function () {
+        Route::post('/create', [TagController::class, 'create']);
+        Route::get('/list', [TagController::class, 'list']);
+        Route::delete('/delete', [TagController::class, 'delete']);
     });
 });
 
