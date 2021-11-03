@@ -25,9 +25,6 @@ class EnterpriseController extends Controller
     public function token(Request $request): JsonResponse
     {
         $key = $request->header('key');
-        if (!$key) {
-            throw new ApiException('企业标识错误');
-        }
         $enterprise = EnterpriseModel::query()->where('key', $key)->first();
         if (!$enterprise) {
             throw new ApiException('企业信息获取失败，请重新登录');
