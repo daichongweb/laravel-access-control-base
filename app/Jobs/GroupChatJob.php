@@ -73,6 +73,7 @@ class GroupChatJob implements ShouldQueue
                         'join_scene' => $member['join_scene'],
                         'invitor' => $member['invitor']['userid'],
                         'group_nickname' => $member['group_nickname'],
+                        'unionid' => $member['unionid'] ?? '',
                         'name' => $member['name'],
                         'join_time' => $member['join_time'],
                         'is_admin' => (int)in_array($member['userid'], array_column($adminList, 'userid')),
