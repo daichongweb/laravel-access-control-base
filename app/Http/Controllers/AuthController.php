@@ -20,7 +20,7 @@ class AuthController extends Controller
         $data = [];
         if ($code = $request->get('code')) {
             $service = new AuthService();
-            $service->token = 'e6l8vHh8nG6L-DmAjINWuR5CIGApqMsQD5u1qQjMwzyB1d-clSNsgkMoxHXceLJ_fPVWk9b4-G4uaGe_7rsSQ_Lus25Kj2jGfqRBk4JINVFkKcyNQPWkPKXXZYua0HZA9YmyaDPYA1QxAVnyNnGKAHKn3xv0iWjzjCWZ6vuvl7buayq5xFBT1pfG8WQppY07EjucqCtIirPGBNF02ap8sg';
+            $service->token = 'Zaw9OS56OMIoK3MFrbD4_i6UPlbIAP1e8VTpt9hRV4T_5tsqBCj4HIgFUlAc1WrYQ-3A73sUu_qKCEuCnQsKLf9NFH3oM1-1m8vObEadHd7aT-UQoSbb85Q_XAI96oHkBnSK3db34yBH9NLd-nGgQZ7tij6lcxOVvl_IU4Ju3z_6dVoR9p_n-m4jmy1BZZM37wxnYyeAixHILJDI7yfmDQ';
             $data = $service->user($code);
             var_dump($data);
         }
