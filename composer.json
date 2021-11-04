@@ -2,11 +2,15 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "aliyuncs/oss-sdk-php": "^2.4",
         "curl/curl": "^2.3",
         "doctrine/dbal": "^3.1",
         "fruitcake/laravel-cors": "^2.0",

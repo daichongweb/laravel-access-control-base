@@ -6,6 +6,7 @@ use App\Http\Controllers\Manager\EnterpriseController;
 use App\Http\Controllers\Manager\LoginController;
 use App\Http\Controllers\Manager\MemberController;
 use App\Http\Controllers\Manager\TagController;
+use App\Http\Controllers\Manager\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 */
 //
 Route::middleware('auth:sanctum')->group(function () {
+
+    // 企业相关
     Route::prefix('enterprise')->group(function () {
         Route::get('/get-token', [EnterpriseController::class, 'token'])->middleware('enterprise.key.valid');
         Route::post('/create', [EnterpriseController::class, 'create']);
@@ -54,6 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/list', [TagController::class, 'list']);
         Route::delete('/delete', [TagController::class, 'delete']);
     });
+
+    // 上传图片
+    Route::post('/upload/image', [UploadController::class, 'image']);
 });
 
 // 超级管理员登录
