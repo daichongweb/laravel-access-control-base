@@ -62,7 +62,6 @@ class PostsController extends Controller
     public function info(Request $request): JsonResponse
     {
         $info = PostsModel::query()->with('tags')
-            ->with('covers')
             ->with(['member' => function ($query) {
                 $query->select(['id', 'username', 'avatar']);
             }])
