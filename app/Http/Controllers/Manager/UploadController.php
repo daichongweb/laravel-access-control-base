@@ -36,6 +36,6 @@ class UploadController extends Controller
             'service' => 'aliyun',
             'type' => 'image'
         ]);
-        return ResponseHelper::success(['path' => $path, 'id' => $model->id]);
+        return ResponseHelper::success(['path' => env('ALI_DOMAIN') . $path, 'id' => $model->id]);
     }
 }
