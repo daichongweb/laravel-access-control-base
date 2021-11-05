@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * 素材模型
@@ -39,5 +40,14 @@ class PostsModel extends Model
     public function covers(): BelongsToMany
     {
         return $this->belongsToMany(UploadsModel::class, 'posts_middle_uploads', 'post_id', 'upload_id')->orderBy('id', 'desc')->withTimestamps();
+    }
+
+    /**
+     * 发布人一对一关联
+     * @return HasOne
+     */
+    public function member(): HasOne
+    {
+        return $this->hasOne(MemberModel::class, 'id', 'member_id');
     }
 }

@@ -53,4 +53,21 @@ class PostsController extends Controller
             ->simplePaginate(15);
         return ResponseHelper::success($list);
     }
+
+    /**
+     * 文章详情
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function info(Request $request): JsonResponse
+    {
+        $info = PostsModel::query()->with('tags')
+            ->with('covers')
+            ->with(['member' => function ($query) {
+                $query->select(['id', 'username', 'avatar']);
+            }])
+            ->where('id', $request->get('id'))
+            ->first();
+        return ResponseHelper::success($info);
+    }
 }
