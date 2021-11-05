@@ -58,7 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('posts')->group(function () {
             Route::post('/create', [PostsController::class, 'create']);
             Route::get('/my', [PostsController::class, 'my']);
-            Route::get('/info', [PostsController::class, 'info']);
             Route::get('/list', [PostsController::class, 'list']);
         });
     });
@@ -70,6 +69,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete', [TagController::class, 'delete']);
     });
 });
+
+Route::get('posts/info', [PostsController::class, 'info']);
 
 // 超级管理员登录
 Route::post('/admin-login', [LoginController::class, 'adminLogin']);
