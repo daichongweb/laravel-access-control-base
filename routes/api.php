@@ -5,6 +5,7 @@ use App\Http\Controllers\Manager\CustomerGroupController;
 use App\Http\Controllers\Manager\EnterpriseController;
 use App\Http\Controllers\Manager\LoginController;
 use App\Http\Controllers\Manager\MemberController;
+use App\Http\Controllers\Manager\PostsController;
 use App\Http\Controllers\Manager\TagController;
 use App\Http\Controllers\Manager\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,15 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/create', [MemberController::class, 'create']);
             Route::post('/bind', [MemberController::class, 'bind']);
         });
+
+        // 上传图片
+        Route::post('/upload/image', [UploadController::class, 'image']);
+
+        // 素材相关
+        Route::prefix('posts')->group(function () {
+            Route::post('/create', [PostsController::class, 'create']);
+            Route::get('/my', [PostsController::class, 'my']);
+        });
     });
 
     // 素材标签
@@ -57,9 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/list', [TagController::class, 'list']);
         Route::delete('/delete', [TagController::class, 'delete']);
     });
-
-    // 上传图片
-    Route::post('/upload/image', [UploadController::class, 'image']);
 });
 
 // 超级管理员登录

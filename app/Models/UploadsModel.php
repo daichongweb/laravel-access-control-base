@@ -19,4 +19,16 @@ class UploadsModel extends Model
         'service',
         'type'
     ];
+
+    public function getFilePathAttribute($value): string
+    {
+        return env('ALI_DOMAIN') . $value;
+    }
+
+    protected $hidden = [
+        'service',
+        'type',
+        'member_id',
+        'enterprise_id'
+    ];
 }

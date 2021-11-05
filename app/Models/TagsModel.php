@@ -15,4 +15,10 @@ class TagsModel extends Model
         'name',
         'member_id'
     ];
+
+    protected $hidden = [
+        'member_id',
+        'created_at',
+        'updated_at'
+    ];
 }
