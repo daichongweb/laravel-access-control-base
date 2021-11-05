@@ -69,4 +69,20 @@ class PostsController extends Controller
             ->first();
         return ResponseHelper::success($info);
     }
+
+    /**
+     * 推荐列表
+     * @return JsonResponse
+     */
+    public function list(): JsonResponse
+    {
+        $list = PostsModel::query()->with('tags')
+            ->with('covers')
+            ->with(['member' => function ($query) {
+                $query->select(['id', 'username', 'avatar']);
+            }])->orderBy('collect_num', 'desc')
+            ->orderBy('share_num', 'desc')
+            ->simplePaginate(15);
+        return ResponseHelper::success($list);
+    }
 }
