@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
  */
 class LoginController extends Controller
 {
-    private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
+    private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
 
     private $tokenUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code';
 
@@ -30,7 +30,7 @@ class LoginController extends Controller
         if (!$enterprise) {
             throw new ApiException('企业不存在');
         }
-        return redirect(sprintf($this->authUrl, $enterprise->app_id, env('APP_URL') . '/wechat-notify', $enterprise->key));
+        return redirect(sprintf($this->authUrl, $enterprise->app_id, env('APP_URL') . '/wechat-notify'));
     }
 
     /**
