@@ -73,11 +73,11 @@ class WechatAuthService
      */
     public function insertUser($enterpriseId, $userData)
     {
-        $userInfo['enterprise_id'] = $enterpriseId;
-        $userInfo['unionid'] = $userInfo['unionid'] ?? '';
+        $userData['enterprise_id'] = $enterpriseId;
+        $userData['unionid'] = $userData['unionid'] ?? '';
         return WechatMembers::query()->updateOrCreate([
             'enterprise_id' => $enterpriseId,
             'openid' => $userData['openid']
-        ], $userInfo);
+        ], $userData);
     }
 }

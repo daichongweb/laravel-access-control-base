@@ -40,8 +40,8 @@ class LoginController extends Controller
             }
             $tokenModel = $wechatService->insertToken($enterprise->id, $tokenData);
             $userInfo = $wechatService->getUserInfo($tokenData['access_token'], $tokenData['openid']);
-            if (isset($tokenData['errcode'])) {
-                throw new ApiException($tokenData['errmsg']);
+            if (isset($userInfo['errcode'])) {
+                throw new ApiException($userInfo['errmsg']);
             }
             $memberModel = $wechatService->insertUser($enterprise->id, $userInfo);
             if (!$tokenModel || !$memberModel) {
