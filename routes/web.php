@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Member\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/auth', [AuthController::class, 'authorizing']);
+
+
+Route::get('/login', [LoginController::class, 'index']);
+Route::get('/wechat-notify', [LoginController::class, 'wechatNotify']);
