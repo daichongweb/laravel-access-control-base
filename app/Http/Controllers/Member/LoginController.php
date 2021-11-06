@@ -30,7 +30,7 @@ class LoginController extends Controller
         if (!$enterprise) {
             throw new ApiException('企业不存在');
         }
-        return redirect(sprintf($this->authUrl, $enterprise->app_id, env('APP_URL') . '/wechat-notify', $enterprise->key));
+        return redirect(sprintf($this->authUrl, $enterprise->app_id, 'http://qunmishu.tebaobao.vip/wechat-notify', $enterprise->key));
     }
 
     /**
