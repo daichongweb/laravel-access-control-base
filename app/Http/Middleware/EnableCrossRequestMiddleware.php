@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EnableCrossRequestMiddleware
 {
@@ -16,11 +17,16 @@ class EnableCrossRequestMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        header('Content-Type: text/html;charset=utf-8');
-        header('Access-Control-Allow-Origin:*');
-        header('Access-Control-Allow-Methods:POST,GET,PUT,OPTIONS,DELETE');
-        header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Allow-Headers: Content-Type,Access-Control-Allow-Origin,Access-token,Content-Length,Accept-Encoding,X-Requested-with, Origin,Access-Control-Allow-Methods');
-        return $next($request);
+        $response = $next($request);
+        if ($response instanceof StreamedResponse) {
+            header('Access-Control-Allow-Origin: *');
+            return $response;
+        }
+        $response->header('Access-Control-Allow-Origin', '*');
+        $response->header('Access-Control-Allow-Headers', 'x-requested-with, Content-Type, authorization');
+        $response->header('Access-Control-Expose-Headers', 'Authorization, authenticated');
+        $response->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, OPTIONS, DELETE');
+        $response->header('Access-Control-Allow-Credentials', 'true');
+        return $response;
     }
 }
