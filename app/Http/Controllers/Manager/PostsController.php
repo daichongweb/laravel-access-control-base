@@ -31,8 +31,8 @@ class PostsController extends Controller
         DB::beginTransaction();
         try {
             $posts = PostsModel::query()->create($request->all());
-            $posts->tags()->attach($request->get('tags'));
-            $posts->covers()->attach($request->get('covers'));
+            $posts->tags()->sync($request->get('tags'));
+            $posts->covers()->sync($request->get('covers'));
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
