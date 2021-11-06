@@ -27,7 +27,7 @@ class LoginController extends Controller
         if (!$code) {
             throw new ApiException('授权失败');
         }
-        $enterprise = EnterpriseModel::query()->where('key', $request->get('key'))->first();
+        $enterprise = EnterpriseModel::query()->where('key', $request->header('key'))->first();
         if (!$enterprise) {
             throw new ApiException('企业不存在');
         }
