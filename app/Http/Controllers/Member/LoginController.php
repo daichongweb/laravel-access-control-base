@@ -19,33 +19,14 @@ use Illuminate\Support\Facades\DB;
  */
 class LoginController extends Controller
 {
-    private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect';
-
-    /**
-     * 微信授权
-     * @throws ApiException
-     */
-    public function index(Request $request)
-    {
-        $key = $request->get('key');
-        if (!$key) {
-            throw new ApiException('企业标识错误');
-        }
-        $enterprise = EnterpriseModel::query()->where('key', $key)->first();
-        if (!$enterprise) {
-            throw new ApiException('企业不存在');
-        }
-        return redirect(sprintf($this->authUrl, $enterprise->app_id, 'http://qunmishu.tebaobao.vip/wechat-notify', $enterprise->key));
-    }
-
     /**
      * code换取access_token
      * @throws ApiException
      */
-    public function wechatNotify(Request $request): JsonResponse
+    public function getUserInfo(Request $request): JsonResponse
     {
         $code = $request->get('code');
-        $key = $request->get('state');
+        $key = $request->get('key');
         if (!$code || !$key) {
             throw new ApiException('授权失败');
         }

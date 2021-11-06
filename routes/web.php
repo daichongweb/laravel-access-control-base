@@ -19,8 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/auth', [AuthController::class, 'authorizing']);
-
-
-Route::get('/login', [LoginController::class, 'index']);
-Route::get('/wechat-notify', [LoginController::class, 'wechatNotify']);
+// 微信授权登录获取用户信息
+Route::get('/get-user-info', [LoginController::class, 'getUserInfo'])->middleware('enterprise.key.valid');
