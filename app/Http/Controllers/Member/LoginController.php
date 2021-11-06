@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Models\EnterpriseModel;
+use App\Services\WechatAuthService;
 use Illuminate\Http\Request;
 
 /**
@@ -14,7 +15,6 @@ class LoginController extends Controller
 {
     private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
 
-    private $tokenUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code';
 
     /**
      * 微信授权
@@ -40,9 +40,16 @@ class LoginController extends Controller
     public function wechatNotify(Request $request)
     {
         $code = $request->get('code');
-        if (!$code) {
+        $state = $request->get('state');
+        if (!$code || !$state) {
             throw new ApiException('授权失败');
         }
-        var_dump($request->all());
+        $enterprise = EnterpriseModel::query()->where('key', $state)->first();
+        if (!$enterprise) {
+            throw new ApiException('企业不存在');
+        }
+        $wechatService = new WechatAuthService();
+        $tokenData = $wechatService->getAccessToken($enterprise, $code);
+        var_dump($tokenData);
     }
 }
