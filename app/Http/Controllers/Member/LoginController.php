@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Models\EnterpriseModel;
 use Illuminate\Http\Request;
 
 /**
@@ -10,15 +12,37 @@ use Illuminate\Http\Request;
  */
 class LoginController extends Controller
 {
-    private $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
+    private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
 
+    private $tokenUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code';
+
+    /**
+     * 微信授权
+     * @throws ApiException
+     */
     public function index(Request $request)
     {
-        return redirect(sprintf($this->url, 'wx1fd8bd85dba2a4ef', 'http://qunmishu.tebaobao.vip/wechat-notify', 'uzrLd7PotGmgUUJpX5GBBUbrkCeueX8z'));
+        $key = $request->get('key');
+        if (!$key) {
+            throw new ApiException('企业标识错误');
+        }
+        $enterprise = EnterpriseModel::query()->where('key', $key)->first();
+        if (!$enterprise) {
+            throw new ApiException('企业不存在');
+        }
+        return redirect(sprintf($this->authUrl, $enterprise->app_id, env('APP_URL') . '/wechat-notify', $enterprise->key));
     }
 
+    /**
+     * code换取access_token
+     * @throws ApiException
+     */
     public function wechatNotify(Request $request)
     {
+        $code = $request->get('code');
+        if (!$code) {
+            throw new ApiException('授权失败');
+        }
         var_dump($request->all());
     }
 }
