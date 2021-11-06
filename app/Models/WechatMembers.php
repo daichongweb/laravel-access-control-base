@@ -25,4 +25,9 @@ class WechatMembers extends Model
         'headimgurl',
         'unionid'
     ];
+
+    protected $hidden = [
+        'open_id',
+        'unionid'
+    ];
 }
