@@ -35,8 +35,14 @@ class LoginController extends Controller
         try {
             $wechatService = new WechatAuthService();
             $tokenData = $wechatService->getAccessToken($enterprise, $code);
+            if (isset($tokenData['errcode'])) {
+                throw new ApiException($tokenData['errmsg']);
+            }
             $tokenModel = $wechatService->insertToken($enterprise->id, $tokenData);
             $userInfo = $wechatService->getUserInfo($tokenData['access_token'], $tokenData['openid']);
+            if (isset($tokenData['errcode'])) {
+                throw new ApiException($tokenData['errmsg']);
+            }
             $memberModel = $wechatService->insertUser($enterprise->id, $userInfo);
             if (!$tokenModel || !$memberModel) {
                 throw new ApiException('授权失败');
