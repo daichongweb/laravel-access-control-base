@@ -57,13 +57,10 @@ class LoginController extends Controller
         try {
             $wechatService = new WechatAuthService();
             $tokenData = $wechatService->getAccessToken($enterprise, $code);
-            echo '<pre>';
-            print_r($tokenData);
-            echo '</pre>';
-            exit;
             // 存储授权记录
             $tokenData['enterprise_id'] = $enterprise->id;
             $tokenData['unionid'] = $tokenData['unionid'] ?? '';
+            $tokenData['expires_in'] = (int)$tokenData['expires_in'];
             $tokenModel = WechatAccessTokensModel::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
                 'openid' => $tokenData['openid']
