@@ -58,12 +58,19 @@ class LoginController extends Controller
         try {
             $wechatService = new WechatAuthService();
             $tokenData = $wechatService->getAccessToken($enterprise, $code);
+
             // 存储授权记录
+            $tokenData['open_id'] = $tokenData['openid'];
+            $tokenData['enterprise_id'] = $enterprise->id;
             $tokenModel = WechatAccessTokensModel::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
                 'open_id' => $tokenData['access_token']
             ], $tokenData);
             $userInfo = $wechatService->getUserInfo($tokenData['access_token'], $tokenData['openid']);
+
+            // 存储微信用户信息
+            $userInfo['open_id'] = $userInfo['openid'];
+            $userInfo['enterprise_id'] = $enterprise->id;
             $memberModel = WechatMembers::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
                 'open_id' => $tokenData['access_token']
