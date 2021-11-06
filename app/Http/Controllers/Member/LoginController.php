@@ -21,7 +21,6 @@ class LoginController extends Controller
 {
     private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect';
 
-
     /**
      * 微信授权
      * @throws ApiException
@@ -46,11 +45,11 @@ class LoginController extends Controller
     public function wechatNotify(Request $request): JsonResponse
     {
         $code = $request->get('code');
-        $state = $request->get('state');
-        if (!$code || !$state) {
+        $key = $request->get('key');
+        if (!$code || !$key) {
             throw new ApiException('授权失败');
         }
-        $enterprise = EnterpriseModel::query()->where('key', $state)->first();
+        $enterprise = EnterpriseModel::query()->where('key', $key)->first();
         if (!$enterprise) {
             throw new ApiException('企业不存在');
         }
@@ -58,7 +57,10 @@ class LoginController extends Controller
         try {
             $wechatService = new WechatAuthService();
             $tokenData = $wechatService->getAccessToken($enterprise, $code);
-
+            echo '<pre>';
+            print_r($tokenData);
+            echo '</pre>';
+            exit;
             // 存储授权记录
             $tokenData['enterprise_id'] = $enterprise->id;
             $tokenData['unionid'] = $tokenData['unionid'] ?? '';

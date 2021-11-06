@@ -17,7 +17,7 @@ class WechatAccessTokensModel extends Model
     protected $fillable = [
         'enterprise_id',
         'access_token',
-        'expires_id',
+        'expires_in',
         'refresh_token',
         'openid',
         'scope'
