@@ -62,12 +62,14 @@ class LoginController extends Controller
             // 存储授权记录
             $tokenData['open_id'] = $tokenData['openid'];
             $tokenData['enterprise_id'] = $enterprise->id;
+            var_dump($tokenData);
             $tokenModel = WechatAccessTokensModel::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
                 'open_id' => $tokenData['access_token']
             ], $tokenData);
             $userInfo = $wechatService->getUserInfo($tokenData['access_token'], $tokenData['openid']);
-
+            var_dump($userInfo);
+            exit;
             // 存储微信用户信息
             $userInfo['open_id'] = $tokenData['openid'];
             $userInfo['enterprise_id'] = $enterprise->id;
