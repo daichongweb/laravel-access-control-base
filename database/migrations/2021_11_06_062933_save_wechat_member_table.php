@@ -1,0 +1,21 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class SaveWechatMemberTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('wechat_members', function (Blueprint $table) {
+            $table->dropColumn('open_id');
+            $table->string('openid', 64)->nullable(false);
+        });
+    }
+}
