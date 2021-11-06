@@ -19,7 +19,7 @@ class WechatAccessTokensModel extends Model
         'access_token',
         'expires_id',
         'refresh_token',
-        'open_id',
+        'openid',
         'scope'
     ];
 }

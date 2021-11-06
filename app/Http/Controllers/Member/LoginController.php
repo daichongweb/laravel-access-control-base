@@ -64,7 +64,7 @@ class LoginController extends Controller
             $tokenData['unionid'] = $tokenData['unionid'] ?? '';
             $tokenModel = WechatAccessTokensModel::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
-                'open_id' => $tokenData['access_token']
+                'openid' => $tokenData['openid']
             ], $tokenData);
 
             // 存储微信用户信息
@@ -73,7 +73,7 @@ class LoginController extends Controller
             $userInfo['unionid'] = $userInfo['unionid'] ?? '';
             $memberModel = WechatMembers::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
-                'open_id' => $tokenData['access_token']
+                'openid' => $tokenData['openid']
             ], $userInfo);
             if (!$tokenModel || !$memberModel) {
                 throw new ApiException('授权失败');

@@ -16,7 +16,7 @@ class WechatMembers extends Model
 
     protected $fillable = [
         'enterprise_id',
-        'open_id',
+        'openid',
         'nickname',
         'sex',
         'province',
@@ -27,7 +27,7 @@ class WechatMembers extends Model
     ];
 
     protected $hidden = [
-        'open_id',
+        'openid',
         'unionid'
     ];
 }
