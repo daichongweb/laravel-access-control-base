@@ -45,7 +45,7 @@ class LoginController extends Controller
     public function wechatNotify(Request $request): JsonResponse
     {
         $code = $request->get('code');
-        $key = $request->get('key');
+        $key = $request->get('state');
         if (!$code || !$key) {
             throw new ApiException('授权失败');
         }
