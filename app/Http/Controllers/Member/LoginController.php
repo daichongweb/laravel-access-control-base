@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
  */
 class LoginController extends Controller
 {
-    private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
+    private $authUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect';
 
 
     /**
@@ -62,13 +62,17 @@ class LoginController extends Controller
             // 存储授权记录
             $tokenData['open_id'] = $tokenData['openid'];
             $tokenData['enterprise_id'] = $enterprise->id;
+            echo '<pre>';
             print_r($tokenData);
+            echo '</pre>';
             $tokenModel = WechatAccessTokensModel::query()->updateOrCreate([
                 'enterprise_id' => $enterprise->id,
                 'open_id' => $tokenData['access_token']
             ], $tokenData);
             $userInfo = $wechatService->getUserInfo($tokenData['access_token'], $tokenData['openid']);
+            echo '<pre>';
             print_r($userInfo);
+            echo '</pre>';
             exit;
             // 存储微信用户信息
             $userInfo['open_id'] = $tokenData['openid'];
