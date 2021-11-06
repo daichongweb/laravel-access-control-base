@@ -6,8 +6,6 @@ use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\EnterpriseModel;
-use App\Models\WechatAccessTokensModel;
-use App\Models\WechatMembers;
 use App\Services\WechatAuthService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -26,11 +24,10 @@ class LoginController extends Controller
     public function getUserInfo(Request $request): JsonResponse
     {
         $code = $request->get('code');
-        $key = $request->get('key');
-        if (!$code || !$key) {
+        if (!$code) {
             throw new ApiException('授权失败');
         }
-        $enterprise = EnterpriseModel::query()->where('key', $key)->first();
+        $enterprise = EnterpriseModel::query()->where('key', $request->get('key'))->first();
         if (!$enterprise) {
             throw new ApiException('企业不存在');
         }
@@ -38,23 +35,9 @@ class LoginController extends Controller
         try {
             $wechatService = new WechatAuthService();
             $tokenData = $wechatService->getAccessToken($enterprise, $code);
-            // 存储授权记录
-            $tokenData['enterprise_id'] = $enterprise->id;
-            $tokenData['unionid'] = $tokenData['unionid'] ?? '';
-            $tokenData['expires_in'] = (int)$tokenData['expires_in'];
-            $tokenModel = WechatAccessTokensModel::query()->updateOrCreate([
-                'enterprise_id' => $enterprise->id,
-                'openid' => $tokenData['openid']
-            ], $tokenData);
-
-            // 存储微信用户信息
+            $tokenModel = $wechatService->insertToken($enterprise->id, $tokenData);
             $userInfo = $wechatService->getUserInfo($tokenData['access_token'], $tokenData['openid']);
-            $userInfo['enterprise_id'] = $enterprise->id;
-            $userInfo['unionid'] = $userInfo['unionid'] ?? '';
-            $memberModel = WechatMembers::query()->updateOrCreate([
-                'enterprise_id' => $enterprise->id,
-                'openid' => $tokenData['openid']
-            ], $userInfo);
+            $memberModel = $wechatService->insertUser($enterprise->id, $userInfo);
             if (!$tokenModel || !$memberModel) {
                 throw new ApiException('授权失败');
             }

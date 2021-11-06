@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Exceptions\ApiException;
+use App\Models\WechatAccessTokensModel;
+use App\Models\WechatMembers;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * 微信授权服务
@@ -42,5 +46,38 @@ class WechatAuthService
         $curl->setData([]);
         $curl->setToArray(true);
         return $curl->request();
+    }
+
+    /**
+     * 存储token信息
+     * @param $enterpriseId
+     * @param $tokenData
+     * @return Builder|Model
+     */
+    public function insertToken($enterpriseId, $tokenData)
+    {
+        $tokenData['enterprise_id'] = $enterpriseId;
+        $tokenData['unionid'] = $tokenData['unionid'] ?? '';
+        $tokenData['expires_in'] = (int)$tokenData['expires_in'];
+        return WechatAccessTokensModel::query()->updateOrCreate([
+            'enterprise_id' => $enterpriseId,
+            'openid' => $tokenData['openid']
+        ], $tokenData);
+    }
+
+    /**
+     * 存储微信用户信息
+     * @param $enterpriseId
+     * @param $userData
+     * @return Builder|Model
+     */
+    public function insertUser($enterpriseId, $userData)
+    {
+        $userInfo['enterprise_id'] = $enterpriseId;
+        $userInfo['unionid'] = $userInfo['unionid'] ?? '';
+        return WechatMembers::query()->updateOrCreate([
+            'enterprise_id' => $enterpriseId,
+            'openid' => $userData['openid']
+        ], $userInfo);
     }
 }
