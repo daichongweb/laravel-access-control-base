@@ -19,9 +19,8 @@ class ApiException extends \Exception
     protected $data;
     protected $code;
 
-    public function __construct($message, int $code = self::BED_REQUEST, $data = null)
+    public function __construct($message, int $code = self::BED_REQUEST)
     {
-        $this->data = $data;
         $this->code = $code;
         parent::__construct($message, $code);
     }
@@ -31,7 +30,6 @@ class ApiException extends \Exception
         $content = [
             'message' => $this->message,
             'code' => $this->code,
-            'data' => $this->data ?? null,
             'status' => $this->code != self::HTTP_OK ? 'error' : 'success',
             'timestamp' => date('Y-m-d H:i:s')
         ];
