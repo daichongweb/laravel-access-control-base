@@ -48,7 +48,7 @@ class LoginController extends Controller
                 throw new ApiException('授权失败');
             }
             $memberModel->tokens()->delete();
-            $token = $memberModel->createToken('wechat-member');
+            $token = $memberModel->createToken('wechat-member', ['posts:info', 'posts:list']);
             DB::commit();
         } catch (Exception $exception) {
             DB::rollBack();
