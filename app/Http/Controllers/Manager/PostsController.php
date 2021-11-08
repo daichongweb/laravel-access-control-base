@@ -26,7 +26,7 @@ class PostsController extends Controller
     {
         $request->offsetSet('enterprise_id', $request->user()->enterprise_id);
         $request->offsetSet('member_id', $request->user()->id);
-        $request->offsetSet('content', $request->get('content'));
+        $request->offsetSet('content', strip_tags($request->get('content'), '<p><img>'));
         $request->validate();
         DB::beginTransaction();
         try {
