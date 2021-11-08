@@ -47,11 +47,13 @@ class LoginController extends Controller
             if (!$tokenModel || !$memberModel) {
                 throw new ApiException('授权失败');
             }
+            $memberModel->tokens()->delete();
+            $token = $memberModel->createToken('wechat-member');
             DB::commit();
         } catch (Exception $exception) {
             DB::rollBack();
             throw new ApiException($exception->getMessage());
         }
-        return ResponseHelper::success($memberModel);
+        return ResponseHelper::success(['token' => $token->plainTextToken, 'user' => $memberModel]);
     }
 }
