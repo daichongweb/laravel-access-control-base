@@ -70,8 +70,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-Route::get('posts/info', [PostsController::class, 'info']);
-
 // 超级管理员登录
 Route::post('/admin-login', [LoginController::class, 'adminLogin']);
 

@@ -55,22 +55,6 @@ class PostsController extends Controller
     }
 
     /**
-     * 文章详情
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function info(Request $request): JsonResponse
-    {
-        $info = PostsModel::query()->with('tags')
-            ->with(['member' => function ($query) {
-                $query->select(['id', 'username', 'avatar']);
-            }])
-            ->where('id', $request->get('id'))
-            ->first();
-        return ResponseHelper::success($info);
-    }
-
-    /**
      * 推荐列表
      * @return JsonResponse
      */

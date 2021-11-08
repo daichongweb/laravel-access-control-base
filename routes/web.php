@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Member\LoginController;
+use App\Http\Controllers\Member\PostsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +20,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// 微信授权登录获取用户信息
-Route::get('/get-user-info', [LoginController::class, 'getUserInfo'])->middleware('enterprise.key.valid');
+Route::middleware('enterprise.key.valid')->group(function () {
+    // 微信授权登录获取用户信息
+    Route::get('/get-user-info', [LoginController::class, 'getUserInfo']);
+    Route::middleware('auth:sanctum')->group(function () {
+        // 素材
+        Route::prefix('posts')->group(function () {
+            Route::get('/info', [PostsController::class, 'info']);
+        });
+    });
+
+});
