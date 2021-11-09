@@ -17,6 +17,8 @@ class WechatAuthService
 
     private $userInfoUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN';
 
+    private $refreshToken = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s';
+
     /**
      * 获取微信用户access_token
      * @throws ApiException
@@ -26,6 +28,23 @@ class WechatAuthService
         $curl = new CurlService();
         $curl->setMethod('get');
         $curl->setUrl(sprintf($this->tokenUrl, $enterprise->app_id, $enterprise->app_secret, $code));
+        $curl->setData([]);
+        $curl->setToArray(true);
+        return $curl->request();
+    }
+
+    /**
+     * 刷新用户access-token
+     * @param $enterprise
+     * @param $refreshToken
+     * @return false|mixed|string|null
+     * @throws ApiException
+     */
+    public function refreshToken($enterprise, $refreshToken)
+    {
+        $curl = new CurlService();
+        $curl->setMethod('get');
+        $curl->setUrl(sprintf($this->refreshToken, $enterprise->app_id, $refreshToken));
         $curl->setData([]);
         $curl->setToArray(true);
         return $curl->request();

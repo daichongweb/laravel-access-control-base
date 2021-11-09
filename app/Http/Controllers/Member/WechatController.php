@@ -8,7 +8,9 @@ use App\Exceptions\LoginException;
 use App\Helpers\ResponseHelper;
 use App\Helpers\WechatHelper;
 use App\Http\Controllers\Controller;
+use App\Models\EnterpriseModel;
 use App\Services\TicketService;
+use App\Services\WechatAuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -47,5 +49,28 @@ class WechatController extends Controller
         ];
         $parameter['signature'] = WechatHelper::ticketSign($parameter);
         return ResponseHelper::success($parameter);
+    }
+
+    /**
+     * 刷新access-token
+     * @throws ApiException
+     */
+    public function refreshToken(Request $request): JsonResponse
+    {
+        $enterprise = EnterpriseModel::query()->where('key', $request->header('key'))->first();
+        if (!$enterprise) {
+            throw new ApiException('企业不存在');
+        }
+
+        $wechatService = new WechatAuthService();
+        $tokenData = $wechatService->refreshToken($enterprise, $request->user()->token['refresh_token']);
+        if (isset($tokenData['errcode'])) {
+            throw new ApiException($tokenData['errmsg']);
+        }
+        $tokenModel = $wechatService->insertToken($enterprise->id, $tokenData);
+        if (!$tokenModel) {
+            throw new ApiException('刷新失败');
+        }
+        return ResponseHelper::success();
     }
 }

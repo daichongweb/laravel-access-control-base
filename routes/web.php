@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // 公众号配置
         Route::prefix('wechat')->group(function () {
             Route::get('/config', [WechatController::class, 'config']);
+            Route::get('/refresh-token', [WechatController::class, 'refreshToken']);
         });
     });
 });
