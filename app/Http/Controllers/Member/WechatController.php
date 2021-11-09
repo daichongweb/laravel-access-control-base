@@ -65,7 +65,7 @@ class WechatController extends Controller
         $wechatService = new WechatAuthService();
         $tokenData = $wechatService->refreshToken($enterprise, $request->user()->token['refresh_token']);
         if (isset($tokenData['errcode'])) {
-            throw new ApiException($tokenData['errmsg']);
+            throw new LoginException('请重新登录');
         }
         $tokenModel = $wechatService->insertToken($enterprise->id, $tokenData);
         if (!$tokenModel) {
