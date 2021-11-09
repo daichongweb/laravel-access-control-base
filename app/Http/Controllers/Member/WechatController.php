@@ -2,16 +2,50 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Data\TicketRedis;
+use App\Exceptions\ApiException;
+use App\Exceptions\LoginException;
+use App\Helpers\ResponseHelper;
+use App\Helpers\WechatHelper;
 use App\Http\Controllers\Controller;
+use App\Services\TicketService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 /**
  * 微信相关控制器
  */
 class WechatController extends Controller
 {
-    public function config(Request $request)
+    /**
+     * @throws LoginException|ApiException
+     */
+    public function config(Request $request): JsonResponse
     {
-        return ($request->user()->with('token')->first());
+        $currentUser = $request->user();
+        $ticket = TicketRedis::get($currentUser->id);
+        if (!$ticket) {
+            $accessToken = $currentUser->token;
+            if (!$accessToken || $accessToken['expires_in'] <= time()) {
+                // TODO：后期增加刷新token功能，刷新不了再让其重新登录
+                throw new LoginException('请重新登录');
+            }
+            $ticketService = new TicketService();
+            $result = $ticketService->get($accessToken['access_token']);
+            if ($result['errcode'] != 0) {
+                throw new ApiException($result['errmsg']);
+            }
+            $ticket = $result['ticket'];
+            TicketRedis::set($currentUser->id, $ticket, $result['expires_in']);
+        }
+        $parameter = [
+            'noncestr' => Str::random(),
+            'jsapi_ticket' => $ticket,
+            'timestamp' => time(),
+            'url' => $request->get('url')
+        ];
+        $parameter['signature'] = WechatHelper::ticketSign($parameter);
+        return ResponseHelper::success($parameter);
     }
 }

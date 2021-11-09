@@ -58,7 +58,7 @@ class WechatAuthService
     {
         $tokenData['enterprise_id'] = $enterpriseId;
         $tokenData['unionid'] = $tokenData['unionid'] ?? '';
-        $tokenData['expires_in'] = (int)$tokenData['expires_in'];
+        $tokenData['expires_in'] = time() + (int)$tokenData['expires_in'];
         return WechatAccessTokensModel::query()->updateOrCreate([
             'enterprise_id' => $enterpriseId,
             'openid' => $tokenData['openid']
