@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Exceptions\ApiException;
+use App\Exceptions\LoginException;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
@@ -13,12 +14,12 @@ class Authenticate extends Middleware
      *
      * @param Request $request
      * @return void
-     * @throws ApiException
+     * @throws LoginException
      */
     protected function redirectTo($request)
     {
         if (!$request->expectsJson()) {
-            throw new ApiException('请先登录');
+            throw new LoginException('请先登录');
         }
     }
 }
