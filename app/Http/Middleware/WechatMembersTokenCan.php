@@ -18,7 +18,7 @@ class WechatMembersTokenCan
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->getTable() !== 'wechat-members') {
+        if ($request->user()->getTable() !== 'wechat_members') {
             throw new ApiException('无权限操作！');
         }
         return $next($request);

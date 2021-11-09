@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Member\LoginController;
 use App\Http\Controllers\Member\PostsController;
+use App\Http\Controllers\Member\WechatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('posts')->group(function () {
             Route::get('/info', [PostsController::class, 'info']);
         });
-    });
 
-    Route::get('/get-user-info', [LoginController::class, 'getUserInfo']);
+        // 公众号配置
+        Route::prefix('wechat')->group(function () {
+            Route::get('/config', [WechatController::class, 'config']);
+        });
+    });
 });
+
+Route::get('/get-user-info', [LoginController::class, 'getUserInfo']);
