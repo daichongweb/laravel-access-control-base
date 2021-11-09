@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/select', [EnterpriseController::class, 'select'])->middleware('enterprise.key.valid');
     });
 
-    Route::middleware('enterprise.key.valid')->group(function () {
+    Route::middleware(['enterprise.key.valid', 'members'])->group(function () {
         //客户群相关
         Route::prefix('customer-group')->group(function () {
             Route::get('/list', [CustomerGroupController::class, 'list']);

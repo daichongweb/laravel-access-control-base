@@ -18,6 +18,9 @@ class CustomerController extends Controller
 
     private $service;
 
+    /**
+     * @throws ApiException
+     */
     public function __construct(CustomerService $customerService, Request $request)
     {
         $this->service = $customerService;

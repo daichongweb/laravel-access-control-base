@@ -21,6 +21,9 @@ class CustomerGroupController extends Controller
 
     private $service;
 
+    /**
+     * @throws ApiException
+     */
     public function __construct(CustomerGroupService $customerGroupService, Request $request)
     {
         $this->service = $customerGroupService;

@@ -19,15 +19,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::middleware('enterprise.key.valid')->group(function () {
-    // 微信授权登录获取用户信息
-    Route::get('/get-user-info', [LoginController::class, 'getUserInfo']);
-    Route::middleware('auth:sanctum')->group(function () {
-        // 素材
+    Route::middleware(['enterprise.key.valid', 'wechat.members'])->group(function () {
+        // 素材相关
         Route::prefix('posts')->group(function () {
             Route::get('/info', [PostsController::class, 'info']);
         });
     });
 
+    Route::get('/get-user-info', [LoginController::class, 'getUserInfo']);
 });
