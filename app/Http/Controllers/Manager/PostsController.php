@@ -48,7 +48,10 @@ class PostsController extends Controller
      */
     public function my(Request $request): JsonResponse
     {
-        $list = PostsModel::query()->with('tags')->with('covers')
+        $list = PostsModel::query()
+            ->withCount('viewMembers')
+            ->with('tags')
+            ->with('covers')
             ->where('member_id', $request->user()->id)
             ->simplePaginate(15);
         return ResponseHelper::success($list);
@@ -76,11 +79,14 @@ class PostsController extends Controller
      */
     public function list(): JsonResponse
     {
-        $list = PostsModel::query()->with('tags')
+        $list = PostsModel::query()
+            ->withCount('viewMembers')
+            ->with('tags')
             ->with('covers')
             ->with(['member' => function ($query) {
                 $query->select(['id', 'username', 'avatar']);
-            }])->orderBy('collect_num', 'desc')
+            }])
+            ->orderBy('collect_num', 'desc')
             ->orderBy('share_num', 'desc')
             ->simplePaginate(15);
         return ResponseHelper::success($list);

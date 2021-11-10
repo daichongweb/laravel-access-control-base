@@ -50,4 +50,9 @@ class PostsModel extends Model
     {
         return $this->hasOne(MemberModel::class, 'id', 'member_id');
     }
+
+    public function viewMembers(): HasMany
+    {
+        return $this->hasMany(WechatMemberViewLogsModel::class, 'post_id', 'id');
+    }
 }
