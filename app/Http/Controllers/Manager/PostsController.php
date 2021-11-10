@@ -112,7 +112,7 @@ class PostsController extends Controller
                 $query->select(['id', 'nickname', 'headimgurl', 'updated_at']);
             })
             ->where('post_id', $request->get('post_id'))
-            ->select(['wechat_member_id'])
+            ->select(['wechat_member_id', 'view_num'])
             ->simplePaginate(15);
         return ResponseHelper::success($list);
     }

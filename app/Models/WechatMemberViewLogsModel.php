@@ -18,11 +18,19 @@ class WechatMemberViewLogsModel extends Model
     protected $fillable = [
         'enterprise_id',
         'wechat_member_id',
-        'post_id'
+        'post_id',
+        'view_num'
     ];
 
     public function wechatMembers(): HasOne
     {
         return $this->hasOne(WechatMembers::class, 'id', 'wechat_member_id');
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($log) {
+            $log->view_num += 1;
+        });
     }
 }
