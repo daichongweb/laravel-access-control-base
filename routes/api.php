@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/follow-list', [MemberController::class, 'list']);
             Route::post('/create', [MemberController::class, 'create']);
             Route::post('/bind', [MemberController::class, 'bind']);
+            Route::post('/modify-info', [MemberController::class, 'modifyInfo']);
         });
 
         // 上传图片

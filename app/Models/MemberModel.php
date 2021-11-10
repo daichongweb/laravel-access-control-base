@@ -26,7 +26,9 @@ class MemberModel extends Authenticatable
         'pid',
         'name',
         'email',
-        'password'
+        'password',
+        'avatar',
+        'username'
     ];
 
     protected $hidden = ['password'];

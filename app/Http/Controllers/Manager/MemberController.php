@@ -8,6 +8,7 @@ use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
+use App\Http\Requests\ModifyInfoRequest;
 use App\Models\MemberModel;
 use App\Models\User;
 use App\Services\MemberService;
@@ -21,6 +22,9 @@ class MemberController extends Controller
 {
     public $service;
 
+    /**
+     * @throws ApiException
+     */
     public function __construct(MemberService $memberServices, Request $request)
     {
         $this->service = $memberServices;
@@ -79,5 +83,21 @@ class MemberController extends Controller
             throw new ApiException('绑定失败');
         }
         return ResponseHelper::success();
+    }
+
+    /**
+     * 修改用户信息
+     * @throws ApiException
+     */
+    public function modifyInfo(ModifyInfoRequest $request): JsonResponse
+    {
+        $request->validate();
+        $model = MemberModel::query()->updateOrCreate([
+            'id' => $request->user()->id
+        ], $request->all());
+        if (!$model) {
+            throw new ApiException('更新失败');
+        }
+        return ResponseHelper::success($model);
     }
 }
