@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostsRequest;
 use App\Models\PostsModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,8 +49,14 @@ class PostsController extends Controller
      */
     public function my(Request $request): JsonResponse
     {
-        $list = PostsModel::query()
-            ->withCount('viewMembers')
+        $tagId = $request->get('tag_id', 0);
+        $query = PostsModel::query();
+        if ($tagId) {
+            $query->whereHas('tags', function (Builder $builder) use ($tagId) {
+                return $builder->where('tag_id', $tagId);
+            });
+        }
+        $list = $query->withCount('viewMembers')
             ->with('tags')
             ->with('covers')
             ->where('member_id', $request->user()->id)
