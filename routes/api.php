@@ -62,6 +62,11 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/info', [PostsController::class, 'info']);
 
         });
+
+        // 首页
+        Route::prefix('home')->group(function () {
+            Route::get('/count', [\App\Http\Controllers\Manager\HomeController::class, 'count']);
+        });
     });
 
     // 素材标签
