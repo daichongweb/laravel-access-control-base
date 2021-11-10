@@ -61,7 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/my', [PostsController::class, 'my']);
             Route::get('/list', [PostsController::class, 'list']);
             Route::get('/info', [PostsController::class, 'info']);
-
+            Route::get('/view-log', [PostsController::class, 'viewLog']);
         });
 
         // 首页

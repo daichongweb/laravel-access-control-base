@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostsRequest;
 use App\Models\PostsModel;
+use App\Models\WechatMemberViewLogsModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -95,6 +96,23 @@ class PostsController extends Controller
             }])
             ->orderBy('collect_num', 'desc')
             ->orderBy('share_num', 'desc')
+            ->simplePaginate(15);
+        return ResponseHelper::success($list);
+    }
+
+    /**
+     * 文章浏览日志
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function viewLog(Request $request): JsonResponse
+    {
+        $list = WechatMemberViewLogsModel::query()
+            ->with('wechatMembers', function ($query) {
+                $query->select(['id', 'nickname', 'headimgurl', 'updated_at']);
+            })
+            ->where('post_id', $request->get('post_id'))
+            ->select(['wechat_member_id'])
             ->simplePaginate(15);
         return ResponseHelper::success($list);
     }
