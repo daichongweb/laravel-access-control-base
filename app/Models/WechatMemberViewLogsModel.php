@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * 文章查看记录表
@@ -21,8 +21,8 @@ class WechatMemberViewLogsModel extends Model
         'post_id'
     ];
 
-    public function wechatMembers(): HasMany
+    public function wechatMembers(): HasOne
     {
-        return $this->hasMany(WechatMembers::class, 'id', 'wechat_member_id');
+        return $this->hasOne(WechatMembers::class, 'id', 'wechat_member_id');
     }
 }
