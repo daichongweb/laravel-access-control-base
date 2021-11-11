@@ -9,7 +9,9 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
 use App\Http\Requests\ModifyInfoRequest;
+use App\Models\CollectsModel;
 use App\Models\MemberModel;
+use App\Models\PostsModel;
 use App\Models\User;
 use App\Services\MemberService;
 use Illuminate\Http\JsonResponse;
@@ -99,5 +101,47 @@ class MemberController extends Controller
             throw new ApiException('更新失败');
         }
         return ResponseHelper::success($model);
+    }
+
+    /**
+     * 收藏素材
+     * @throws ApiException
+     */
+    public function collect(Request $request): JsonResponse
+    {
+        $postId = $request->get('post_id');
+        if (!PostsModel::query()->where('id', $postId)->exists()) {
+            throw new ApiException('素材不存在');
+        }
+        $memberId = $request->user()->id;
+        $value = [
+            'post_id' => $postId,
+            'member_id' => $memberId
+        ];
+        $model = CollectsModel::query()->updateOrCreate($value, $value);
+        if (!$model) {
+            throw new ApiException('收藏失败');
+        }
+        return ResponseHelper::success();
+    }
+
+    /**
+     * 取消收藏
+     * @throws ApiException
+     */
+    public function unCollect(Request $request): JsonResponse
+    {
+        $collectId = $request->get('collect_id');
+        $model = CollectsModel::query()
+            ->where('id', $collectId)
+            ->where('member_id', $request->user()->id)
+            ->first();
+        if (!$model) {
+            throw new ApiException('未找到收藏记录');
+        }
+        if (!$model->delete()) {
+            throw new ApiException('取消收藏失败');
+        }
+        return ResponseHelper::success();
     }
 }

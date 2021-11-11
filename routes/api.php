@@ -50,6 +50,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/create', [MemberController::class, 'create']);
             Route::post('/bind', [MemberController::class, 'bind']);
             Route::post('/modify-info', [MemberController::class, 'modifyInfo']);
+            Route::post('/collect', [MemberController::class, 'collect']);
+            Route::delete('/un-collect', [MemberController::class, 'unCollect']);
         });
 
         // 上传图片
