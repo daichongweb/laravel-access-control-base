@@ -14,9 +14,4 @@ class PostsMiddleTagsModel extends Model
     use HasFactory;
 
     protected $table = 'posts_middle_tags';
-
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
 }

@@ -144,4 +144,23 @@ class MemberController extends Controller
         }
         return ResponseHelper::success();
     }
+
+    /**
+     * 收藏列表
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function collects(Request $request): JsonResponse
+    {
+        $list = CollectsModel::query()
+            ->with('post', function ($query) {
+                $query->with('member')
+                    ->with('tags')
+                    ->with('covers')
+                    ->select(['id', 'title', 'member_id']);
+            })
+            ->where('member_id', $request->user()->id)
+            ->simplePaginate(15);
+        return ResponseHelper::success($list);
+    }
 }

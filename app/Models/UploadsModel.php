@@ -21,11 +21,6 @@ class UploadsModel extends Model
         'type'
     ];
 
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
-
     public function getFilePathAttribute($value): string
     {
         return env('ALI_DOMAIN') . $value;

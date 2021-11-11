@@ -39,9 +39,4 @@ class WechatMembers extends Model
     {
         return $this->hasOne(WechatAccessTokensModel::class, 'openid', 'openid');
     }
-
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
 }

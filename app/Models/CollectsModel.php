@@ -5,6 +5,7 @@ namespace App\Models;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * 企业成员收藏
@@ -20,8 +21,8 @@ class CollectsModel extends Model
         'member_id'
     ];
 
-    protected function serializeDate(DateTimeInterface $date): string
+    public function post(): HasOne
     {
-        return $date->format('Y-m-d H:i:s');
+        return $this->hasOne(PostsModel::class, 'id', 'post_id');
     }
 }

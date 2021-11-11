@@ -36,11 +36,6 @@ class EnterpriseModel extends Model
         'name', 'corp_id', 'corp_secret', 'app_id', 'app_secret'
     ];
 
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
-
     protected static function booted()
     {
         static::creating(function ($model) {

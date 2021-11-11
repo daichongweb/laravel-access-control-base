@@ -22,12 +22,7 @@ class WechatMemberViewLogsModel extends Model
         'post_id',
         'view_num'
     ];
-
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
-
+    
     public function wechatMembers(): HasOne
     {
         return $this->hasOne(WechatMembers::class, 'id', 'wechat_member_id');

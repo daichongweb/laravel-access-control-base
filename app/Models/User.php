@@ -46,9 +46,4 @@ class User extends Authenticatable
      * 超级管理员
      */
     const ADMIN = 99;
-
-    protected function serializeDate(DateTimeInterface $date): string
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
 }
