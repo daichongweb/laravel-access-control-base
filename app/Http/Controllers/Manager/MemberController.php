@@ -157,7 +157,7 @@ class MemberController extends Controller
                 $query->with('member')
                     ->with('tags')
                     ->with('covers')
-                    ->select(['id', 'title', 'member_id']);
+                    ->select(['id', 'title', 'member_id', 'share_num', 'collect_num']);
             })
             ->where('member_id', $request->user()->id)
             ->simplePaginate(15);
