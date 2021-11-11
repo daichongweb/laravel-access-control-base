@@ -31,6 +31,8 @@ class MemberModel extends Authenticatable
         'username'
     ];
 
+
+
     protected $hidden = ['password'];
 
     public function enterprise(): HasOne

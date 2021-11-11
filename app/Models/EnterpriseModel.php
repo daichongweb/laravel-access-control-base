@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -34,6 +35,11 @@ class EnterpriseModel extends Model
     protected $fillable = [
         'name', 'corp_id', 'corp_secret', 'app_id', 'app_secret'
     ];
+
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 
     protected static function booted()
     {
