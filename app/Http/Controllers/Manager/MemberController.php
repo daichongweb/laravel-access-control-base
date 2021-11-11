@@ -154,7 +154,9 @@ class MemberController extends Controller
     {
         $list = CollectsModel::query()
             ->with('post', function ($query) {
-                $query->with('member')
+                $query->with('member', function ($member) {
+                    $member->select(['id', 'username']);
+                })
                     ->with('tags')
                     ->with('covers')
                     ->select(['id', 'title', 'member_id', 'share_num', 'collect_num']);
