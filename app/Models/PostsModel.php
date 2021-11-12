@@ -26,7 +26,7 @@ class PostsModel extends Model
         'collect_num',
         'share_num'
     ];
-    
+
     /**
      * posts多对多关联tags
      */
@@ -55,5 +55,10 @@ class PostsModel extends Model
     public function viewMembers(): HasMany
     {
         return $this->hasMany(WechatMemberViewLogsModel::class, 'post_id', 'id');
+    }
+
+    public function collect(): HasOne
+    {
+        return $this->hasOne(CollectsModel::class, 'post_id', 'id');
     }
 }
