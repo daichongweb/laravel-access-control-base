@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Member;
 
-use App\Data\AccessTokenRedis;
 use App\Data\TicketRedis;
 use App\Exceptions\ApiException;
 use App\Exceptions\LoginException;
@@ -10,7 +9,6 @@ use App\Helpers\ResponseHelper;
 use App\Helpers\WechatHelper;
 use App\Http\Controllers\Controller;
 use App\Models\EnterpriseModel;
-use App\Services\TicketService;
 use App\Services\WechatAuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,17 +25,7 @@ class WechatController extends Controller
     public function config(Request $request): JsonResponse
     {
         $currentUser = $request->user();
-        $ticket = TicketRedis::get($currentUser->id);
-        if (!$ticket) {
-            $accessToken = AccessTokenRedis::get($currentUser->enterprise_id);
-            $ticketService = new TicketService();
-            $result = $ticketService->get($accessToken);
-            if ($result['errcode'] != 0) {
-                throw new ApiException($result['errmsg']);
-            }
-            $ticket = $result['ticket'];
-            TicketRedis::set($currentUser->id, $ticket, $result['expires_in']);
-        }
+        $ticket = TicketRedis::get($currentUser->enterprise_id);
         $parameter = [
             'noncestr' => Str::random(),
             'jsapi_ticket' => $ticket,

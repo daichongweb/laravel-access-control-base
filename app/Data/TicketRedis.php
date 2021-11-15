@@ -2,6 +2,8 @@
 
 namespace App\Data;
 
+use App\Exceptions\ApiException;
+use App\Services\TicketService;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -9,18 +11,28 @@ use Illuminate\Support\Facades\Redis;
  */
 class TicketRedis
 {
-    private static function key($memberId)
+    private static function key($enterpriseId)
     {
-        return 'token:wechat_member:' . $memberId;
+        return 'token:wechat_member:' . $enterpriseId;
     }
 
-    public static function set(int $memberId, string $ticket, $expiresIn = 7200)
+    public static function set(int $enterpriseId, string $ticket, $expiresIn = 7200)
     {
-        return Redis::setex(self::key($memberId), $expiresIn, $ticket);
+        return Redis::setex(self::key($enterpriseId), $expiresIn, $ticket);
     }
 
-    public static function get($memberId)
+    /**
+     * @throws ApiException
+     */
+    public static function get($enterpriseId)
     {
-        return Redis::get(self::key($memberId));
+        $token = Redis::get(self::key($enterpriseId));
+        if (!$token) {
+            $ticketService = new TicketService();
+            $result = $ticketService->get(AccessTokenRedis::get($enterpriseId));
+            $token = $result['ticket'];
+            self::set($enterpriseId, $token, $result['expires_in']);
+        }
+        return $token;
     }
 }
