@@ -37,7 +37,7 @@ class TicketService
         $curlService->setMethod('get');
         $curlService->setData([]);
         $result = $curlService->request();
-        if ($result['errcode'] > 0) {
+        if (isset($result['errcode']) && $result['errcode'] > 0) {
             throw new ApiException($result['errmsg']);
         }
         return $result;
