@@ -12,7 +12,10 @@ class WechatHelper
     public static function ticketSign(array $parameter): string
     {
         ksort($parameter);
-        $str = http_build_str($parameter);
-        return sha1($str);
+        $str = '';
+        foreach ($parameter as $key => $value) {
+            $str .= $key . '=' . $value . '&';
+        }
+        return sha1(rtrim($str, '&'));
     }
 }
