@@ -22,14 +22,14 @@ use Illuminate\Support\Str;
 class WechatController extends Controller
 {
     /**
-     * @throws LoginException|ApiException
+     * @throws ApiException
      */
     public function config(Request $request): JsonResponse
     {
         $currentUser = $request->user();
         $ticket = TicketRedis::get($currentUser->id);
         if (!$ticket) {
-            $accessToken = AccessTokenRedis::get($request->user()->enterprise_id);
+            $accessToken = AccessTokenRedis::get($currentUser->enterprise_id);
             $ticketService = new TicketService();
             $result = $ticketService->get($accessToken);
             if ($result['errcode'] != 0) {

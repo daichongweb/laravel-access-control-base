@@ -23,7 +23,7 @@ class AccessTokenRedis
     public static function get(int $enterpriseId)
     {
         $token = Redis::get(self::key($enterpriseId));
-        if ($token) {
+        if (!$token) {
             $ticketService = new TicketService();
             $result = $ticketService->accessToken(EnterpriseModel::query()->find($enterpriseId));
             $token = $result['access_token'];
