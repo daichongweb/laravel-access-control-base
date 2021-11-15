@@ -80,7 +80,7 @@ class WechatAuthService
         $tokenData['expires_in'] = time() + (int)$tokenData['expires_in'];
         return WechatAccessTokensModel::query()->updateOrCreate([
             'enterprise_id' => $enterpriseId,
-            'openid' => $tokenData['openid']
+            'openid' => $tokenData['openid'],
         ], $tokenData);
     }
 

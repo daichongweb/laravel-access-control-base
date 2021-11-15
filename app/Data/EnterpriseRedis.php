@@ -8,13 +8,13 @@ use App\Services\EnterpriseService;
 use Illuminate\Support\Facades\Redis;
 
 /**
- * 企业token存储
+ * 企业微信access_token存储
  */
 class EnterpriseRedis
 {
     private static function key($key): string
     {
-        return 'enterprise_access_token:' . $key;
+        return 'enterprise:access_token:' . $key;
     }
 
     public static function set($key, $token, $expiresIn)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Data\AccessTokenRedis;
 use App\Data\TicketRedis;
 use App\Exceptions\ApiException;
 use App\Exceptions\LoginException;
@@ -28,11 +29,7 @@ class WechatController extends Controller
         $currentUser = $request->user();
         $ticket = TicketRedis::get($currentUser->id);
         if (!$ticket) {
-            $accessToken = $currentUser->token;
-            if (!$accessToken || $accessToken['expires_in'] <= time()) {
-                // TODO：后期增加刷新token功能，刷新不了再让其重新登录
-                throw new LoginException('请重新登录');
-            }
+            $accessToken = AccessTokenRedis::get($request->user()->enterprise_id);
             $ticketService = new TicketService();
             $result = $ticketService->get($accessToken['access_token']);
             if ($result['errcode'] != 0) {
@@ -52,8 +49,8 @@ class WechatController extends Controller
     }
 
     /**
-     * 刷新access-token
-     * @throws ApiException
+     * 刷新用户access-token
+     * @throws ApiException|LoginException
      */
     public function refreshToken(Request $request): JsonResponse
     {
