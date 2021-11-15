@@ -131,9 +131,9 @@ class MemberController extends Controller
      */
     public function unCollect(Request $request): JsonResponse
     {
-        $collectId = $request->get('collect_id');
+        $postId = $request->get('post_id');
         $model = CollectsModel::query()
-            ->where('id', $collectId)
+            ->where('post_id', $postId)
             ->where('member_id', $request->user()->id)
             ->first();
         if (!$model) {
