@@ -31,7 +31,7 @@ class WechatController extends Controller
         if (!$ticket) {
             $accessToken = AccessTokenRedis::get($request->user()->enterprise_id);
             $ticketService = new TicketService();
-            $result = $ticketService->get($accessToken['access_token']);
+            $result = $ticketService->get($accessToken);
             if ($result['errcode'] != 0) {
                 throw new ApiException($result['errmsg']);
             }
