@@ -164,4 +164,14 @@ class MemberController extends Controller
             ->simplePaginate(15);
         return ResponseHelper::success($list);
     }
+
+    /**
+     * 用户信息
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function profile(Request $request): JsonResponse
+    {
+        return ResponseHelper::success($request->user());
+    }
 }

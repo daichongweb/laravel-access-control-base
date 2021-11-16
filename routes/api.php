@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/collect', [MemberController::class, 'collect']);
             Route::delete('/un-collect', [MemberController::class, 'unCollect']);
             Route::get('/collects', [MemberController::class, 'collects']);
+            Route::get('/profile', [MemberController::class, 'profile']);
         });
 
         // 上传图片
