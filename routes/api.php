@@ -67,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/info', [PostsController::class, 'info']);
             Route::get('/view-log', [PostsController::class, 'viewLog']);
             Route::post('/top', [PostsController::class, 'top']);
+            Route::delete('/delete', [PostsController::class, 'delete']);
         });
 
 

@@ -152,4 +152,17 @@ class PostsController extends Controller
         }
         return ResponseHelper::success();
     }
+
+    /**
+     * 删除文章
+     * @throws ApiException
+     */
+    public function delete(Request $request): JsonResponse
+    {
+        $posts = (new PostsService())->getByMemberId($request->get('post_id'), $request->user()->id);
+        if (!$posts) {
+            throw new ApiException('文章不存在');
+        }
+        return ResponseHelper::auto($posts->delete());
+    }
 }
