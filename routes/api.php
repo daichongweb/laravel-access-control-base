@@ -69,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/top', [PostsController::class, 'top']);
         });
 
+
         // 首页
         Route::prefix('home')->group(function () {
             Route::get('/count', [\App\Http\Controllers\Manager\HomeController::class, 'count']);
@@ -81,6 +82,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/list', [TagController::class, 'list']);
         Route::delete('/delete', [TagController::class, 'delete']);
     });
+});
+
+// 设置
+Route::prefix('settings')->group(function () {
+    Route::get('/version', [\App\Http\Controllers\Manager\SettingsController::class, 'version']);
 });
 
 // 超级管理员登录
