@@ -21,6 +21,6 @@ class SettingsController extends Controller
     public function version(Request $request): JsonResponse
     {
         $setting = (new SettingService())->getSettingByName('version');
-        return ResponseHelper::success($request->get('version') < $setting->options['version'] ? $setting->options : []);
+        return ResponseHelper::success($request->get('version') < $setting->options['version'] ? $setting->options : null);
     }
 }
