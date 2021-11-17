@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostsRequest;
 use App\Models\PostsModel;
 use App\Models\WechatMemberViewLogsModel;
+use App\Services\PostsService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,6 +62,8 @@ class PostsController extends Controller
             ->with('tags')
             ->with('covers')
             ->where('member_id', $request->user()->id)
+            ->orderBy('is_top', 'desc')
+            ->orderBy('created_at', 'desc')
             ->simplePaginate(15);
         return ResponseHelper::success($list);
     }
@@ -120,5 +123,33 @@ class PostsController extends Controller
             ->select(['wechat_member_id', 'view_num'])
             ->simplePaginate(15);
         return ResponseHelper::success($list);
+    }
+
+    /**
+     * 文章置顶
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ApiException
+     */
+    public function top(Request $request): JsonResponse
+    {
+        $postService = new PostsService();
+        $post = $postService->getByMemberId($request->get('post_id'), $request->user()->id);
+        if (!$post) {
+            throw new ApiException('文章不存在');
+        }
+        if ($post->is_top) {
+            throw new ApiException('已经置顶了');
+        }
+        // 取消置顶
+        if ($topPost = $postService->getTopByMemberId($request->user()->id)) {
+            $topPost->is_top = 0;
+            $topPost->save();
+        }
+        $post->is_top = PostsModel::TOP;
+        if (!$post->save()) {
+            throw new ApiException('置顶失败');
+        }
+        return ResponseHelper::success();
     }
 }

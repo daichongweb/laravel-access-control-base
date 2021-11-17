@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,13 +17,17 @@ class PostsModel extends Model
 
     protected $table = 'posts';
 
+    const TOP = 1;
+    const UN_TOP = 0;
+
     protected $fillable = [
         'enterprise_id',
         'member_id',
         'title',
         'content',
         'collect_num',
-        'share_num'
+        'share_num',
+        'is_top'
     ];
 
     /**
