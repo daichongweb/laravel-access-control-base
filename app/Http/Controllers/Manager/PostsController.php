@@ -80,7 +80,7 @@ class PostsController extends Controller
             ->withExists(['collect' => function ($query) use ($memberId) {
                 $query->where('member_id', $memberId);
             }])
-            ->with('tags')
+            ->with(['tags', 'covers'])
             ->with(['member' => function ($query) {
                 $query->select(['id', 'username', 'avatar']);
             }])
