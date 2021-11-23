@@ -70,17 +70,23 @@ class MemberController extends Controller
      * 绑定企业微信user_id
      * @throws ApiException
      */
-    public function bind(MemberRequest $request): JsonResponse
+    public function bind(Request $request)
     {
-        $request->validate('bind');
+        $code = $request->post('code');
+        if (!$code) {
+            throw new ApiException('缺少参数code');
+        }
         $member = MemberModel::query()
-            ->where('name', $request->post('name'))
-            ->where('enterprise_id', $request->post('enterprise_id'))
+            ->where('id', $request->user()->id)
             ->first();
         if (!$member) {
             throw new ApiException('成员不存在');
         }
-        $member->corp_user_id = $request->post('corp_user_id');
+        $result = $this->service->getUserInfo($code);
+        if (isset($result['errcode']) && $result['errcode']) {
+            throw new ApiException($result['errmsg']);
+        }
+        $member->corp_user_id = $result['UserId'];
         if (!$member->save()) {
             throw new ApiException('绑定失败');
         }
