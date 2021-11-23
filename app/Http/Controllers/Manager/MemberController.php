@@ -70,7 +70,7 @@ class MemberController extends Controller
      * 绑定企业微信user_id
      * @throws ApiException
      */
-    public function bind(Request $request)
+    public function bind(Request $request): JsonResponse
     {
         $code = $request->post('code');
         if (!$code) {
