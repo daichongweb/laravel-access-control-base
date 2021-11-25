@@ -76,9 +76,7 @@ class MemberController extends Controller
         if (!$code) {
             throw new ApiException('缺少参数code');
         }
-        $member = MemberModel::query()
-            ->where('id', $request->user()->id)
-            ->first();
+        $member = MemberModel::query()->where('id', $request->user()->id)->first();
         if (!$member) {
             throw new ApiException('成员不存在');
         }

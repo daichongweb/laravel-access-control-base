@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Events\WechatMemberViewEvent;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
@@ -28,19 +29,17 @@ class PostsController extends Controller
         $request->offsetSet('enterprise_id', $enterprise_id);
         $request->offsetSet('wechat_member_id', $userId);
         $request->validate();
-        $info = PostsModel::query()->with('tags')
+        $info = PostsModel::query()
+            ->with('tags')
             ->with(['member' => function ($query) {
                 $query->select(['id', 'username', 'avatar']);
             }])
             ->where('id', $request->get('id'))
             ->first();
-        // 记录查看日志
-        WechatMemberViewLogsModel::query()->updateOrCreate(
-            [
-                'enterprise_id' => $enterprise_id,
-                'wechat_member_id' => $userId,
-                'post_id' => $request->get('id')
-            ], $request->all());
+        if (!$info) {
+            throw new ApiException('素材不存在');
+        }
+        WechatMemberViewEvent::dispatch($request->user(), $info, $request->all());
         return ResponseHelper::success($info);
     }
 }

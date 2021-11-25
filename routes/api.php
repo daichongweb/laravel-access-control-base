@@ -75,6 +75,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('home')->group(function () {
             Route::get('/count', [\App\Http\Controllers\Manager\HomeController::class, 'count']);
         });
+
+        // 微信用户相关
+        Route::prefix('wechat-member')->group(function () {
+            Route::get('/tags', [\App\Http\Controllers\Manager\WechatMemberController::class, 'tags']);
+        });
     });
 
     // 素材标签
