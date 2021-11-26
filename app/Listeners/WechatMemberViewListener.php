@@ -19,14 +19,14 @@ class WechatMemberViewListener implements ShouldQueue
      *
      * @var string|null
      */
-    public $connection = 'sync';
+    public $connection = 'redis';
 
     /**
      * 任务将被发送到的队列的名称。
      *
      * @var string|null
      */
-    public $queue = 'listeners';
+    public $queue = 'wechatMemberView';
 
     /**
      * 任务被处理的延迟时间（秒）。

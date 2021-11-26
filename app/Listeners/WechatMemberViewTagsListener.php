@@ -18,7 +18,7 @@ class WechatMemberViewTagsListener implements ShouldQueue
      *
      * @var string|null
      */
-    public $connection = 'sync';
+    public $connection = 'redis';
 
     /**
      * 任务将被发送到的队列的名称。
