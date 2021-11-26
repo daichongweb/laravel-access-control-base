@@ -2,11 +2,9 @@
 
 namespace App\Events;
 
-use App\Models\PostsModel;
 use App\Models\WechatMembers;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 
 /**
@@ -15,12 +13,6 @@ use Illuminate\Queue\SerializesModels;
 class WechatMemberViewEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    /**
-     * 素材
-     * @var PostsModel
-     */
-    public $post;
 
     /**
      * 当前用户
@@ -35,10 +27,9 @@ class WechatMemberViewEvent
      *
      * @return void
      */
-    public function __construct(WechatMembers $wechatMember, PostsModel $post, array $request)
+    public function __construct(WechatMembers $wechatMember, array $request)
     {
         $this->currentUser = $wechatMember;
-        $this->post = $post;
         $this->request = $request;
     }
 }

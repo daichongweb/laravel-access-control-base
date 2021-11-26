@@ -2,18 +2,17 @@
 
 namespace App\Listeners;
 
-use App\Events\WechatMemberViewEvent;
-use App\Models\WechatMemberViewLogsModel;
+use App\Events\WechatMemberViewTagsEvent;
 use App\Models\WechatMemberViewTagsModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Redis;
 
 /**
- * 微信用户浏览文章监听器
+ * 用户标签浏览
  */
-class WechatMemberViewListener implements ShouldQueue
+class WechatMemberViewTagsListener implements ShouldQueue
 {
+
     /**
      * 任务将被发送到的连接的名称。
      *
@@ -26,7 +25,7 @@ class WechatMemberViewListener implements ShouldQueue
      *
      * @var string|null
      */
-    public $queue = 'listeners';
+    public $queue = 'wechatMemberViewTags';
 
     /**
      * 任务被处理的延迟时间（秒）。
@@ -38,19 +37,21 @@ class WechatMemberViewListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param WechatMemberViewEvent $event
+     * @param WechatMemberViewTagsEvent $event
      * @return void
      */
-    public function handle(WechatMemberViewEvent $event)
+    public function handle(WechatMemberViewTagsEvent $event)
     {
-        $enterpriseId = $event->currentUser->enterprise_id;
-        $wechatMemberId = $event->currentUser->id;
-        // 浏览记录
-        WechatMemberViewLogsModel::query()->updateOrCreate(
-            [
+        $enterpriseId = $event->member->enterprise_id;
+        $wechatMemberId = $event->member->id;
+        $tags = $event->tags;
+        foreach ($tags as $tag) {
+            $arg = [
                 'enterprise_id' => $enterpriseId,
                 'wechat_member_id' => $wechatMemberId,
-                'post_id' => $event->request['id']
-            ], $event->request);
+                'tag_id' => $tag->id
+            ];
+            WechatMemberViewTagsModel::query()->updateOrCreate($arg, $arg);
+        }
     }
 }

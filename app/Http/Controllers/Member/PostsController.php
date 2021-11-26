@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Member;
 
 use App\Events\WechatMemberViewEvent;
+use App\Events\WechatMemberViewTagsEvent;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
@@ -39,7 +40,9 @@ class PostsController extends Controller
         if (!$info) {
             throw new ApiException('素材不存在');
         }
-        WechatMemberViewEvent::dispatch($request->user(), $info, $request->all());
+        // 事件推送
+        WechatMemberViewEvent::dispatch($request->user(), $request->all());
+        WechatMemberViewTagsEvent::dispatch($request->user(), $info->tags);
         return ResponseHelper::success($info);
     }
 }

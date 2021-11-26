@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\WechatMemberViewEvent;
+use App\Events\WechatMemberViewTagsEvent;
 use App\Listeners\WechatMemberViewListener;
+use App\Listeners\WechatMemberViewTagsListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         WechatMemberViewEvent::class => [
             WechatMemberViewListener::class
+        ],
+        WechatMemberViewTagsEvent::class => [
+            WechatMemberViewTagsListener::class
         ]
     ];
 
