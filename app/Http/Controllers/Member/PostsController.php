@@ -9,7 +9,6 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostViewRequest;
 use App\Models\PostsModel;
-use App\Models\WechatMemberViewLogsModel;
 use Illuminate\Http\JsonResponse;
 
 /**

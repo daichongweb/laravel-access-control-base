@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/list', [CustomerGroupController::class, 'list']);
             Route::get('/info', [CustomerGroupController::class, 'info']);
             Route::get('/sync-info', [CustomerGroupController::class, 'syncInfo']);
+            Route::get('/sync-list', [CustomerGroupController::class, 'syncList']);
         });
 
         // 客户相关

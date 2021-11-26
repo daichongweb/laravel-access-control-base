@@ -7,8 +7,10 @@ use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Jobs\GroupChatJob;
+use App\Jobs\SyncChatGroupListJob;
 use App\Models\ChatGroupInfosModel;
 use App\Models\ChatGroupMembersModel;
+use App\Models\ChatGroupsModel;
 use App\Services\CustomerGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,22 +34,14 @@ class CustomerGroupController extends Controller
 
     /**
      * 群列表
-     * @throws ApiException
      */
     public function list(Request $request): JsonResponse
     {
-        $corpUserId = $request->user()->corp_user_id;
-        if (!$corpUserId) {
-            throw new ApiException('请先绑定企业微信');
-        }
-        $groupChatList = $this->service->groupList($corpUserId, $request->get('limit', 10), $request->get('cursor'));
-        if ($groupChatList) {
-            foreach ($groupChatList['group_chat_list'] as &$chat) {
-                $chatInfo = $this->service->groupInfo($chat['chat_id'], 0);
-                $chat['name'] = $chatInfo['group_chat']['name'] ?: '未命名';
-            }
-        }
-        return ResponseHelper::success($groupChatList);
+        $list = ChatGroupsModel::query()
+            ->where('member_id', $request->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(15);
+        return ResponseHelper::success($list);
     }
 
     /**
@@ -77,6 +71,22 @@ class CustomerGroupController extends Controller
     {
         $info = $this->service->groupInfo($request->get('chat_id'));
         GroupChatJob::dispatch($request->user(), $info);
+        return ResponseHelper::success();
+    }
+
+    /**
+     * 同步群列表
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ApiException
+     */
+    public function syncList(Request $request): JsonResponse
+    {
+        $corpUserId = $request->user()->corp_user_id;
+        if (!$corpUserId) {
+            throw new ApiException('请先绑定企业微信');
+        }
+        SyncChatGroupListJob::dispatch($request->user(), $this->service->token);
         return ResponseHelper::success();
     }
 }
