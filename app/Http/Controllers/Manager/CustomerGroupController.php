@@ -14,6 +14,7 @@ use App\Models\ChatGroupsModel;
 use App\Services\CustomerGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 /**
  * 客户群相关接口
@@ -82,11 +83,22 @@ class CustomerGroupController extends Controller
      */
     public function syncList(Request $request): JsonResponse
     {
-        $corpUserId = $request->user()->corp_user_id;
+        $currentUser = $request->user();
+        $corpUserId = $currentUser->corp_user_id;
         if (!$corpUserId) {
             throw new ApiException('请先绑定企业微信');
         }
-        SyncChatGroupListJob::dispatch($request->user(), $this->service->token);
+        $executed = RateLimiter::attempt(
+            'sync-chat-group-list:' . $currentUser->id,
+            2,
+            function () use ($currentUser) {
+                SyncChatGroupListJob::dispatch($currentUser, $this->service->token);
+            },
+            86400
+        );
+        if (!$executed) {
+            throw new ApiException('每二十四小时限制操作两次');
+        }
         return ResponseHelper::success();
     }
 }
