@@ -40,11 +40,11 @@ class CustomerController extends Controller
         $userId = $request->get('user_id');
         $memberInfo = $this->service->info($userId);
         if ($memberInfo['errcode'] > 0) {
-            throw new ApiException($memberInfo['errmsg']);
+            throw new ApiException('该用户不是一个外部成员.1');
         }
         $externalContact = $memberInfo['external_contact'] ?? '';
         if (!$externalContact) {
-            throw new ApiException('该用户不是一个外部成员');
+            throw new ApiException('该用户不是一个外部成员.2');
         }
         $memberService = new WechatMembersService();
         $viewTags = [];
