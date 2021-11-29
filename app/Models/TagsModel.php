@@ -14,12 +14,14 @@ class TagsModel extends Model
 
     protected $fillable = [
         'name',
-        'member_id'
+        'member_id',
+        'enterprise_id'
     ];
 
     protected $hidden = [
         'member_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'enterprise_id'
     ];
 }

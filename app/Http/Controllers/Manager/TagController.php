@@ -22,6 +22,7 @@ class TagController extends Controller
     public function create(TagRequest $request): JsonResponse
     {
         $request->offsetSet('member_id', $request->user()->id);
+        $request->offsetSet('enterprise_id', $request->user()->enterprise_id);
         $request->validate();
         $model = TagsModel::query()->create($request->all());
         if (!$model) {
