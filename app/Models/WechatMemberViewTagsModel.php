@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class WechatMemberViewTagsModel extends Model
 {
@@ -24,10 +25,15 @@ class WechatMemberViewTagsModel extends Model
         static::saving(function ($log) {
             $log->view_num += 1;
         });
-        
+
         // 创建后
         static::created(function ($log) {
             TagsModel::query()->where('id', $log->tag_id)->increment('view_num', 1);
         });
+    }
+
+    public function tag(): HasOne
+    {
+        return $this->hasOne(TagsModel::class, 'id', 'tag_id');
     }
 }
