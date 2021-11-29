@@ -37,7 +37,10 @@ class TagController extends Controller
      */
     public function list(Request $request): JsonResponse
     {
-        $tags = TagsModel::query()->where('enterprise_id', $request->user()->enterprise_id)->get();
+        $tags = TagsModel::query()
+            ->where('enterprise_id', $request->user()->enterprise_id)
+            ->orderBy('view_num', 'desc')
+            ->get();
         return ResponseHelper::success($tags);
     }
 

@@ -51,7 +51,9 @@ class CustomerController extends Controller
         if ($member = $memberService->getMemberByUnionId($externalContact['unionid'], $request->user()->enterprise_id)) {
             // 用户浏览过的标签
             $viewTags = WechatMemberViewTagsModel::query()
-                ->with('tag')
+                ->with('tag', function ($query) {
+                    $query->orderBy('view_num', 'desc');
+                })
                 ->where('wechat_member_id', $member->id)
                 ->select(['view_num', 'tag_id'])
                 ->get();
