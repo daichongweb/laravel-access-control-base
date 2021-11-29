@@ -62,6 +62,7 @@ class PostsController extends Controller
             ->with('tags')
             ->with('covers')
             ->where('member_id', $request->user()->id)
+            ->where('is_public', PostsModel::NO_PUBLIC)
             ->orderBy('is_top', 'desc')
             ->orderBy('created_at', 'desc')
             ->simplePaginate(15);
@@ -91,9 +92,10 @@ class PostsController extends Controller
 
     /**
      * 推荐列表
+     * @param Request $request
      * @return JsonResponse
      */
-    public function list(): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $list = PostsModel::query()
             ->withCount('viewMembers')
@@ -102,6 +104,8 @@ class PostsController extends Controller
             ->with(['member' => function ($query) {
                 $query->select(['id', 'username', 'avatar']);
             }])
+            ->where('enterprise_id', $request->user()->enterprise_id)
+            ->where('is_public', PostsModel::PUBLIC)
             ->orderBy('collect_num', 'desc')
             ->orderBy('share_num', 'desc')
             ->simplePaginate(15);

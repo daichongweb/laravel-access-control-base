@@ -21,6 +21,9 @@ class PostsModel extends Model
     const TOP = 1;
     const UN_TOP = 0;
 
+    const PUBLIC = 1;
+    const NO_PUBLIC = 0;
+
     protected $fillable = [
         'enterprise_id',
         'member_id',
