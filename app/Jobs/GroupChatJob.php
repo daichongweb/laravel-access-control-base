@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\ChatGroupInfosModel;
 use App\Models\ChatGroupMembersModel;
 use App\Models\MemberModel;
 use Illuminate\Bus\Queueable;
@@ -22,15 +21,18 @@ class GroupChatJob implements ShouldQueue
 
     protected $memberModel;
 
+    protected $groupId;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(MemberModel $memberModel, $groupMemberList)
+    public function __construct(MemberModel $memberModel, $groupMemberList, int $groupId)
     {
         $this->memberModel = $memberModel;
         $this->groupMemberList = $groupMemberList;
+        $this->groupId = $groupId;
     }
 
     /**
@@ -46,21 +48,6 @@ class GroupChatJob implements ShouldQueue
             $groupChat = $this->groupMemberList['group_chat'];
             $memberList = $groupChat['member_list'];
             $adminList = $groupChat['admin_list'];
-            // 同步信息
-            $infoModel = ChatGroupInfosModel::query()->updateOrCreate([
-                'chat_id' => $groupChat['chat_id'],
-                'enterprise_id' => $enterprise_id,
-                'member_id' => $member_id
-            ], [
-                'chat_id' => $groupChat['chat_id'],
-                'chat_name' => $groupChat['name'],
-                'owner' => $groupChat['owner'],
-                'member_num' => count($memberList),
-                'admin_num' => count($adminList),
-                'create_time' => $groupChat['create_time'],
-                'enterprise_id' => $enterprise_id,
-                'member_id' => $member_id
-            ]);
             // 同步成员
             $members = [];
             if ($memberList) {
@@ -79,10 +66,10 @@ class GroupChatJob implements ShouldQueue
                         'is_admin' => (int)in_array($member['userid'], array_column($adminList, 'userid')),
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' => date('Y-m-d H:i:s'),
-                        'info_id' => $infoModel->id
+                        'group_id' => $this->groupId
                     ]);
                 }
-                ChatGroupMembersModel::query()->where('info_id', $infoModel->id)->delete();
+                ChatGroupMembersModel::query()->where('group_id', $this->groupId)->delete();
                 ChatGroupMembersModel::query()->insert($members);
             }
         }

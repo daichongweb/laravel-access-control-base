@@ -40,10 +40,11 @@ class CustomerGroupService
     /**
      * 客户群详情
      * @param $chatId
+     * @param int $needName
      * @return false|mixed|string|null
      * @throws ApiException
      */
-    public function groupInfo($chatId, $needName = 1)
+    public function groupInfo($chatId, int $needName = 1)
     {
         $curl = new CurlService();
         $curl->setUrl(sprintf($this->group_info, $this->token));

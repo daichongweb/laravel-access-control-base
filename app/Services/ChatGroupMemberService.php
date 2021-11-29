@@ -11,10 +11,10 @@ class ChatGroupMemberService
         return ChatGroupMembersModel::query()->where('id', $id)->first();
     }
 
-    public function getMemberByInfoIdAndUserId($info, $userId)
+    public function getMemberByGroupIdAndUserId($groupId, $userId)
     {
         return ChatGroupMembersModel::query()
-            ->where('info_id', $info)
+            ->where('group_id', $groupId)
             ->where('user_id', $userId)
             ->first();
     }

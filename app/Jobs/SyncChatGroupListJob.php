@@ -61,17 +61,22 @@ class SyncChatGroupListJob implements ShouldQueue
             $list = [];
             foreach ($groupChatList['group_chat_list'] as $chat) {
                 $chatInfo = $customerGroupService->groupInfo($chat['chat_id'], 0);
+                $memberList = $chatInfo['group_chat']['member_list'];
+                $adminList = $chatInfo['group_chat']['admin_list'];
                 $chat['name'] = $chatInfo['group_chat']['name'] ?: '未命名';
                 array_push($list, [
                     'enterprise_id' => $this->member->enterprise_id,
                     'member_id' => $this->member->id,
                     'chat_id' => $chat['chat_id'],
                     'chat_name' => $chatInfo['group_chat']['name'] ?: '未命名',
-                    'status' => $chat['status']
+                    'status' => $chat['status'],
+                    'owner' => $chatInfo['group_chat']['owner'],
+                    'member_num' => count($memberList),
+                    'admin_num' => count($adminList)
                 ]);
             }
             if ($list) {
-                ChatGroupsModel::query()->upsert($list, ['enterprise_id', 'member_id', 'chat_id'], ['chat_name', 'status']);
+                ChatGroupsModel::query()->upsert($list, ['enterprise_id', 'member_id', 'chat_id'], ['chat_name', 'status', 'owner', 'member_num', 'admin_num']);
             }
             if ($cursor = $groupChatList['next_cursor'] ?? '') {
                 $this->sync($cursor);

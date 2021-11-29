@@ -26,7 +26,7 @@ class ChatGroupMembersModel extends Model
         'is_admin',
         'enterprise_id',
         'member_id',
-        'info_id'
+        'group_id'
     ];
 
     /**

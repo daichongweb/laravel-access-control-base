@@ -8,9 +8,9 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Jobs\GroupChatJob;
 use App\Jobs\SyncChatGroupListJob;
-use App\Models\ChatGroupInfosModel;
 use App\Models\ChatGroupMembersModel;
 use App\Models\ChatGroupsModel;
+use App\Services\ChatGroupService;
 use App\Services\CustomerGroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,16 +49,10 @@ class CustomerGroupController extends Controller
      * 群详情
      * @param Request $request
      * @return JsonResponse
-     * @throws ApiException
      */
     public function info(Request $request): JsonResponse
     {
-        $chatId = $request->get('chat_id');
-        $info = ChatGroupInfosModel::query()->where('chat_id', $chatId)->value('id');
-        if (!$info) {
-            throw new ApiException('请先同步群详情');
-        }
-        $list = ChatGroupMembersModel::query()->where('info_id', $info)->simplePaginate(10);
+        $list = ChatGroupMembersModel::query()->where('group_id', $request->get('group_id'))->simplePaginate(10);
         return ResponseHelper::success($list);
     }
 
@@ -70,8 +64,13 @@ class CustomerGroupController extends Controller
      */
     public function syncInfo(Request $request): JsonResponse
     {
-        $info = $this->service->groupInfo($request->get('chat_id'));
-        GroupChatJob::dispatch($request->user(), $info);
+        $groupId = $request->get('group_id');
+        $chat = (new ChatGroupService())->getGroupById($groupId);
+        if (!$chat) {
+            throw new ApiException('客户群不存在');
+        }
+        $info = $this->service->groupInfo($chat->chat_id);
+        GroupChatJob::dispatch($request->user(), $info, $groupId);
         return ResponseHelper::success();
     }
 

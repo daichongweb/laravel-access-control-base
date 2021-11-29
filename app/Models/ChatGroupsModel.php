@@ -17,7 +17,10 @@ class ChatGroupsModel extends Model
         'member_id',
         'chat_id',
         'chat_name',
-        'status'
+        'status',
+        'owner',
+        'member_num',
+        'admin_num'
     ];
 
     protected $table = 'chat_groups';
