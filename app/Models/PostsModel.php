@@ -28,7 +28,8 @@ class PostsModel extends Model
         'content',
         'collect_num',
         'share_num',
-        'is_top'
+        'is_top',
+        'is_public'
     ];
 
     /**

@@ -23,7 +23,8 @@ class PostsRequest extends BaseRequest
             'title' => 'required|max:64',
             'covers' => ['required', Rule::exists('uploads', 'id')],
             'content' => 'required',
-            'tags' => ['required', Rule::exists('tags', 'id')]
+            'tags' => ['required', Rule::exists('tags', 'id')],
+            'is_public' => 'in:0,1'
         ];
     }
 
@@ -40,7 +41,8 @@ class PostsRequest extends BaseRequest
             'covers.exists' => '封面图不存在',
             'content.required' => '素材内容不能为空',
             'tags.required' => '标签不能为空',
-            'tags.exists' => '所选标签不存在'
+            'tags.exists' => '所选标签不存在',
+            'is_public.in' => '是否公开参数类型错误'
         ];
     }
 }
