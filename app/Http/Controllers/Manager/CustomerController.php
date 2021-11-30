@@ -7,6 +7,7 @@ use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\WechatMemberViewTagsModel;
+use App\Services\ChatGroupMemberService;
 use App\Services\CustomerService;
 use App\Services\WechatMembersService;
 use Illuminate\Http\JsonResponse;
@@ -38,17 +39,15 @@ class CustomerController extends Controller
     public function getUserInfo(Request $request): JsonResponse
     {
         $userId = $request->get('user_id');
-        $memberInfo = $this->service->info($userId);
-        if ($memberInfo['errcode'] > 0) {
-            throw new ApiException('该用户不是一个外部成员.1');
-        }
-        $externalContact = $memberInfo['external_contact'] ?? '';
-        if (!$externalContact) {
-            throw new ApiException('该用户不是一个外部成员.2');
+        $groupId = $request->get('group_id');
+        $groupMemberService = new ChatGroupMemberService();
+        $groupMember = $groupMemberService->getMemberByGroupIdAndUserId($groupId, $userId);
+        if (!$groupMember->unionid) {
+            throw new ApiException('该用户不是一个外部成员');
         }
         $memberService = new WechatMembersService();
         $viewTags = [];
-        if ($member = $memberService->getMemberByUnionId($externalContact['unionid'], $request->user()->enterprise_id)) {
+        if ($member = $memberService->getMemberByUnionId($groupMember->unionid, $groupMember->enterprise_id)) {
             // 用户浏览过的标签
             $viewTags = WechatMemberViewTagsModel::query()
                 ->with('tag', function ($query) {
@@ -58,6 +57,6 @@ class CustomerController extends Controller
                 ->select(['view_num', 'tag_id'])
                 ->get();
         }
-        return ResponseHelper::success(['wechat_member' => $member, 'chat_group_member' => $externalContact, 'tags' => $viewTags]);
+        return ResponseHelper::success(['wechat_member' => $member, 'tags' => $viewTags]);
     }
 }
