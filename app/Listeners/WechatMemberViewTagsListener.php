@@ -45,17 +45,13 @@ class WechatMemberViewTagsListener implements ShouldQueue
         $enterpriseId = $event->member->enterprise_id;
         $wechatMemberId = $event->member->id;
         $tags = $event->tags;
-        $data = [];
         foreach ($tags as $tag) {
             $arg = [
                 'enterprise_id' => $enterpriseId,
                 'wechat_member_id' => $wechatMemberId,
                 'tag_id' => $tag->id
             ];
-            array_push($data, $arg);
-        }
-        if ($data) {
-            WechatMemberViewTagsModel::query()->upsert($data, ['enterprise_id', 'wechat_member_id', 'tag_id'], ['tag_id']);
+            WechatMemberViewTagsModel::query()->updateOrCreate($arg, $arg);
         }
     }
 }
