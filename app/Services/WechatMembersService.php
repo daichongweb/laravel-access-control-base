@@ -23,4 +23,9 @@ class WechatMembersService
     {
         return WechatMemberViewLogsModel::query()->where('wechat_member_id', $memberId)->pluck('post_id');
     }
+
+    public function getMemberById($id)
+    {
+        return WechatMembers::query()->where('id', $id)->first();
+    }
 }

@@ -38,16 +38,22 @@ class CustomerController extends Controller
      */
     public function getUserInfo(Request $request): JsonResponse
     {
-        $userId = $request->get('user_id');
-        $groupId = $request->get('group_id');
-        $groupMemberService = new ChatGroupMemberService();
-        $groupMember = $groupMemberService->getMemberByGroupIdAndUserId($groupId, $userId);
-        if (!$groupMember->unionid) {
-            throw new ApiException('该用户不是一个外部成员');
-        }
+        $wechatMemberId = $request->get('wechat_member_id');
         $memberService = new WechatMembersService();
+        if (!$wechatMemberId) {
+            $userId = $request->get('user_id');
+            $groupId = $request->get('group_id');
+            $groupMemberService = new ChatGroupMemberService();
+            $groupMember = $groupMemberService->getMemberByGroupIdAndUserId($groupId, $userId);
+            if (!$groupMember->unionid) {
+                throw new ApiException('该用户不是一个外部成员');
+            }
+            $member = $memberService->getMemberByUnionId($groupMember->unionid, $groupMember->enterprise_id);
+        } else {
+            $member = $memberService->getMemberById($wechatMemberId);
+        }
         $viewTags = [];
-        if ($member = $memberService->getMemberByUnionId($groupMember->unionid, $groupMember->enterprise_id)) {
+        if ($member) {
             // 用户浏览过的标签
             $viewTags = WechatMemberViewTagsModel::query()
                 ->with('tag', function ($query) {
