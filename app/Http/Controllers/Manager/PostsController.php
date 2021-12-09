@@ -62,7 +62,6 @@ class PostsController extends Controller
             ->with('tags')
             ->with('covers')
             ->where('member_id', $request->user()->id)
-            ->where('is_public', PostsModel::NO_PUBLIC)
             ->orderBy('is_top', 'desc')
             ->orderBy('created_at', 'desc')
             ->simplePaginate(15);
