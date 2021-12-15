@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * 微信登录控制器
+ * 登录控制器
  */
 class LoginController extends Controller
 {

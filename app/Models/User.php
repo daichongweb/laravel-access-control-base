@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -44,7 +44,11 @@ class User extends Authenticatable
     ];
 
     /**
-     * 超级管理员
+     * 一个用户对应多个角色，通过中间表关联
+     * @return BelongsToMany
      */
-    const ADMIN = 99;
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'users_middle_roles', 'user_id', 'role_id');
+    }
 }
