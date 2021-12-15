@@ -14,7 +14,7 @@ class LoginRequest extends BaseRequest
             'name' => 'required|min:4',
             'email' => 'required|email',
             'password' => 'required',
-            'type' => 'required|in:nameLogin,emailLogin'
+            'type' => 'required|in:name-login,email-login'
         ];
     }
 
@@ -32,7 +32,7 @@ class LoginRequest extends BaseRequest
     }
 
     public $scenes = [
-        'nameLogin' => ['name'],
-        'emailLogin' => ['email']
+        'name-login' => ['name'],
+        'email-Login' => ['email']
     ];
 }

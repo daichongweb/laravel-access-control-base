@@ -2,9 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\EnterpriseKeyValid;
-use App\Http\Middleware\MembersTokenCan;
-use App\Http\Middleware\WechatMembersTokenCan;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -65,8 +62,5 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'enterprise.key.valid' => EnterpriseKeyValid::class,
-        'members' => MembersTokenCan::class,
-        'wechat.members' => WechatMembersTokenCan::class
     ];
 }

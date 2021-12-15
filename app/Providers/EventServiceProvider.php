@@ -20,12 +20,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ],
-        WechatMemberViewEvent::class => [
-            WechatMemberViewListener::class
-        ],
-        WechatMemberViewTagsEvent::class => [
-            WechatMemberViewTagsListener::class
         ]
     ];
 
