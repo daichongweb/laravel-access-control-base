@@ -39,7 +39,10 @@ class LoginController extends Controller
         // 先撤销所有令牌
         $loginUser->tokens()->delete();
         $token = $loginUser->createToken('admin');
-        return ResponseHelper::success($token->plainTextToken);
+        return ResponseHelper::success([
+            'user' => $loginUser,
+            'token' => $token->plainTextToken
+        ]);
     }
 
     public function out(Request $request): JsonResponse
