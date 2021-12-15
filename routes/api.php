@@ -23,7 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // 角色管理
     Route::prefix('role')->group(function () {
         Route::post('/create', [RoleController::class, 'create']);
-        Route::delete('/del', [RoleController::class, 'del']);
+        Route::post('/disable', [RoleController::class, 'disable']);
+        Route::post('/enable', [RoleController::class, 'enable']);
+        Route::post('/bind-rule', [RoleController::class, 'bindRule']);
     });
 
     // 权限管理

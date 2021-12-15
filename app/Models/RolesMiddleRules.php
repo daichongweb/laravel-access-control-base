@@ -9,6 +9,8 @@ class RolesMiddleRules extends Model
 {
     use HasFactory;
 
+    public $table = 'roles_middle_rules';
+
     public $fillable = [
         'role_id',
         'rule_id'
