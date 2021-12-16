@@ -12,9 +12,9 @@ class RoleRequest extends BaseRequest
     {
         return [
             'role_name' => 'required|max:64|min:2|unique:roles,name',
-            'role_id' => ['required', $this->roleIdExists()],
+            'role_id' => ['required', $this->roleIdExists(true)],
             'rule_ids' => ['required', 'array', $this->ruleIdExists()],
-            'role_ids' => ['required', 'array', $this->roleIdExists()],
+            'role_ids' => ['required', 'array', $this->roleIdExists(false)],
         ];
     }
 
@@ -42,9 +42,13 @@ class RoleRequest extends BaseRequest
         'change-status' => ['role_ids']
     ];
 
-    private function roleIdExists(): Exists
+    private function roleIdExists($enable): Exists
     {
-        return Rule::exists('roles', 'id')->where('status', CommonStatus::ENABLE);
+        $exists = Rule::exists('roles', 'id');
+        if ($enable) {
+            $exists->where('status', CommonStatus::ENABLE);
+        }
+        return $exists;
     }
 
     private function ruleIdExists(): Exists

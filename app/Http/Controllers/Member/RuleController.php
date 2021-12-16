@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RuleRequest;
 use App\Models\Rule;
+use App\Services\RuleService;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -35,5 +36,25 @@ class RuleController extends Controller
             'parent_id'
         ]));
         return ResponseHelper::auto($bool);
+    }
+
+    /**
+     * @throws ApiException
+     */
+    public function disable(RuleRequest $request): JsonResponse
+    {
+        $request->validate('change-status');
+        $ruleService = new RuleService();
+        return ResponseHelper::auto($ruleService->disable($request->post('rule_ids', [])));
+    }
+
+    /**
+     * @throws ApiException
+     */
+    public function enable(RuleRequest $request): JsonResponse
+    {
+        $request->validate('change-status');
+        $ruleService = new RuleService();
+        return ResponseHelper::auto($ruleService->enable($request->post('rule_ids', [])));
     }
 }

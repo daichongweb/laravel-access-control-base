@@ -2,6 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CommonStatus;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Exists;
+
 class RuleRequest extends BaseRequest
 {
     public function rules(): array
@@ -12,6 +16,7 @@ class RuleRequest extends BaseRequest
             'name' => 'required|max:64|min:2|unique:rules,name,' . $id,
             'route' => 'required|max:128|min:2|unique:rules,route,' . $id,
             'parent_id' => 'required|exclude_if:parent_id,0|exists:rules,id',
+            'rule_ids' => ['required', 'array', Rule::exists('rules', 'id')],
         ];
     }
 
@@ -29,11 +34,15 @@ class RuleRequest extends BaseRequest
             'parent_id.exists' => '上级路由不存在',
             'id.required' => '权限ID不能为空',
             'id.exists' => '权限ID不存在',
+            'rule_ids.required' => '权限ID不能为空',
+            'rule_ids.array' => '权限ID参数类型错误',
+            'rule_ids.exists' => '权限不存在'
         ];
     }
 
     public $scenes = [
         'edit' => ['id', 'rule_name', 'route', 'parent_id'],
         'create' => ['rule_name', 'route', 'parent_id'],
+        'change-status' => ['rule_ids']
     ];
 }
