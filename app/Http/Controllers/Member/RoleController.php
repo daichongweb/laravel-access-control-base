@@ -82,5 +82,4 @@ class RoleController extends Controller
         $request->validate('change-rule');
         return ResponseHelper::auto($this->service->delRule($request->post('role_id'), $request->post('rule_ids', [])));
     }
-
 }

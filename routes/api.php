@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('user')->group(function () {
         Route::post('/bind-role', [UserController::class, 'bindRole']);
         Route::get('/info', [UserController::class, 'info']);
+        Route::put('/edit-pwd', [UserController::class, 'editPwd']);
     });
 });
 
