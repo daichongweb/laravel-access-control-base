@@ -82,4 +82,10 @@ class RoleController extends Controller
         $request->validate('change-rule');
         return ResponseHelper::auto($this->service->delRule($request->post('role_id'), $request->post('rule_ids', [])));
     }
+
+    public function index(Request $request): JsonResponse
+    {
+        $list = Role::query()->simplePaginate($request->get('limit', 15));
+        return ResponseHelper::success($list);
+    }
 }
