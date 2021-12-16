@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // 权限管理
     Route::prefix('rule')->group(function () {
         Route::post('/create', [RuleController::class, 'create']);
+        Route::put('/edit', [RuleController::class, 'edit']);
     });
 
     // 用户管理
