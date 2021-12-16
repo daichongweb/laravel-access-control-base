@@ -19,6 +19,6 @@ class RuleService
 
     public function changeStatus(array $ids, int $status): int
     {
-        return Rule::query()->where('id', $ids)->update(['status' => $status]);
+        return Rule::query()->whereIn('id', $ids)->update(['status' => $status]);
     }
 }

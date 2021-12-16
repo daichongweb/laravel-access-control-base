@@ -9,6 +9,7 @@ use App\Http\Requests\RuleRequest;
 use App\Models\Rule;
 use App\Services\RuleService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 规则管理

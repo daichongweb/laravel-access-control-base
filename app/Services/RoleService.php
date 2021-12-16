@@ -20,7 +20,7 @@ class RoleService
 
     public function changeStatus(array $ids, int $status): int
     {
-        return Role::query()->where('id', $ids)->update(['status' => $status]);
+        return Role::query()->whereIn('id', $ids)->update(['status' => $status]);
     }
 
     /*******************添加/删除「角色与权限关系」********************/
