@@ -23,9 +23,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // 角色管理
     Route::prefix('role')->group(function () {
         Route::post('/create', [RoleController::class, 'create']);
+        Route::put('/edit', [RoleController::class, 'edit']);
         Route::post('/disable', [RoleController::class, 'disable']);
         Route::post('/enable', [RoleController::class, 'enable']);
         Route::post('/bind-rule', [RoleController::class, 'bindRule']);
+        Route::post('/remove-rule', [RoleController::class, 'removeRule']);
     });
 
     // 权限管理
@@ -36,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // 用户管理
     Route::prefix('user')->group(function () {
         Route::post('/bind-role', [UserController::class, 'bindRole']);
+        Route::get('/info', [UserController::class, 'info']);
     });
 });
 

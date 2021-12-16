@@ -33,14 +33,36 @@ class RoleController extends Controller
         return ResponseHelper::auto($bool);
     }
 
-    public function disable(Request $request): JsonResponse
+    /**
+     * @throws ApiException
+     */
+    public function edit(RoleRequest $request): JsonResponse
     {
-        return ResponseHelper::auto($this->service->disable($request->post('ids', [])));
+        $request->validate('create');
+        $role = $this->service->findById($request->post('role_id'));
+        if (!$role) {
+            throw new ApiException('角色不存在');
+        }
+        $role->name = $request->get('role_name');
+        return ResponseHelper::auto($role->save());
     }
 
-    public function enable(Request $request): JsonResponse
+    /**
+     * @throws ApiException
+     */
+    public function disable(RoleRequest $request): JsonResponse
     {
-        return ResponseHelper::auto($this->service->enable($request->post('ids', [])));
+        $request->validate('change-status');
+        return ResponseHelper::auto($this->service->disable($request->post('role_ids', [])));
+    }
+
+    /**
+     * @throws ApiException
+     */
+    public function enable(RoleRequest $request): JsonResponse
+    {
+        $request->validate('change-status');
+        return ResponseHelper::auto($this->service->enable($request->post('role_ids', [])));
     }
 
     /**
@@ -48,7 +70,7 @@ class RoleController extends Controller
      */
     public function bindRule(RoleRequest $request): JsonResponse
     {
-        $request->validate('change');
+        $request->validate('change-rule');
         return ResponseHelper::auto($this->service->addRule($request->post('role_id'), $request->post('rule_ids', [])));
     }
 
@@ -57,7 +79,8 @@ class RoleController extends Controller
      */
     public function removeRule(RoleRequest $request): JsonResponse
     {
-        $request->validate('change');
+        $request->validate('change-rule');
         return ResponseHelper::auto($this->service->delRule($request->post('role_id'), $request->post('rule_ids', [])));
     }
+
 }

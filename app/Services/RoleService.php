@@ -41,7 +41,7 @@ class RoleService
         if ($role = $this->findById($roleId)) {
             $bool = $role->rules()->$fun($ruleIds);
         }
-        return $bool;
+        return (bool)$bool;
     }
 
     public function findById($roleId)

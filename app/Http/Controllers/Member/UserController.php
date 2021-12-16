@@ -17,4 +17,9 @@ class UserController extends Controller
         $model = $request->user()->roles()->sync($request->post('role_ids'));
         return ResponseHelper::auto($model);
     }
+
+    public function info(Request $request): JsonResponse
+    {
+        return ResponseHelper::success($request->user());
+    }
 }
