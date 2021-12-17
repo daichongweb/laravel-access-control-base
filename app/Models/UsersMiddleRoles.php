@@ -13,6 +13,4 @@ class UsersMiddleRoles extends Model
         'user_id',
         'role_id'
     ];
-
-
 }

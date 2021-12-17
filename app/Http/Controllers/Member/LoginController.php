@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,7 @@ class LoginController extends Controller
         }
         // 先撤销所有令牌
         $loginUser->tokens()->delete();
-        $token = $loginUser->createToken('admin');
+        $token = $loginUser->createToken('admin', (new UserService())->useRoute($loginUser->id));
         return ResponseHelper::success([
             'user' => $loginUser,
             'token' => $token->plainTextToken
