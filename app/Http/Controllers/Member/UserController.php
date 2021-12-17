@@ -7,7 +7,9 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
 use App\Http\Requests\UserRequest;
-use App\Models\UsersMiddleRoles;
+use App\Models\RolesMiddleRules;
+use App\Models\User;
+use App\Services\RoleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -29,7 +31,7 @@ class UserController extends Controller
         $roleIds = $request->post('role_ids');
         $bool = true;
         if ($bindType == 'attach') {
-            $middle = UsersMiddleRoles::query()->where('user_id', $request->user()->id)->pluck('role_id');
+            $middle = (new RoleService())->getRoleIdsByUserId($request->user()->id);
             $roleIds = array_values(array_diff($roleIds, $middle->toArray()));
         }
         if ($roleIds) {
@@ -59,9 +61,26 @@ class UserController extends Controller
         return ResponseHelper::auto($bool);
     }
 
-    public function roles(Request $request): JsonResponse
+    /**
+     * @throws ApiException
+     */
+    public function roles(UserRequest $request): JsonResponse
     {
-        $user = $request->user()->with('roles')->first();
+        $request->validate('role-rule');
+        $user = User::query()->with('roles')->where('id', $request->get('user_id'))->first();
         return ResponseHelper::success($user);
+    }
+
+    /**
+     * @throws ApiException
+     */
+    public function rules(UserRequest $request): JsonResponse
+    {
+        $request->validate('role-rule');
+        $roleIds = (new RoleService())->getRoleIdsByUserId($request->get('user_id'));
+        $rules = RolesMiddleRules::query()->with('rule', function ($query) {
+            $query->select(['id', 'name', 'route', 'status', 'parent_id']);
+        })->where('role_id', $roleIds)->get();
+        return ResponseHelper::success($rules);
     }
 }

@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/info', [UserController::class, 'info']);
         Route::put('/edit-pwd', [UserController::class, 'editPwd']);
         Route::get('/roles', [UserController::class, 'roles']);
+        Route::get('/rules', [UserController::class, 'rules']);
     });
 });
 

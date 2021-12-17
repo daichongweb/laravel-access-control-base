@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Role;
+use App\Models\UsersMiddleRoles;
+use Illuminate\Support\Collection;
 
 class RoleService
 {
@@ -47,5 +49,10 @@ class RoleService
     public function findById($roleId)
     {
         return Role::query()->find($roleId);
+    }
+
+    public function getRoleIdsByUserId($userId): Collection
+    {
+        return UsersMiddleRoles::query()->where('user_id', $userId)->pluck('role_id');
     }
 }
