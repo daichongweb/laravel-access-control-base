@@ -88,4 +88,10 @@ class RoleController extends Controller
         $list = Role::query()->simplePaginate($request->get('limit', 15));
         return ResponseHelper::success($list);
     }
+
+    public function rules(Request $request): JsonResponse
+    {
+        $rules = Role::query()->with('rules')->where('id', $request->get('role_id'))->select(['id', 'name', 'status'])->get();
+        return ResponseHelper::success($rules);
+    }
 }

@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/bind-rule', [RoleController::class, 'bindRule']);
         Route::post('/remove-rule', [RoleController::class, 'removeRule']);
         Route::get('/index', [RoleController::class, 'index']);
+        Route::get('/rules', [RoleController::class, 'rules']);
     });
 
     // 权限管理
