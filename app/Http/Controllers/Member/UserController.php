@@ -35,6 +35,9 @@ class UserController extends Controller
             throw new ApiException('旧密码错误');
         }
         $request->user()->password = bcrypt($request->post('new_pwd'));
-        return ResponseHelper::auto($request->user()->save());
+        if ($bool = $request->user()->save()) {
+            $request->user()->tokens()->delete();
+        }
+        return ResponseHelper::auto($bool);
     }
 }
