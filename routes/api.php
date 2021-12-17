@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 //
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::post('/login/out', [LoginController::class, 'out']);
 
     // 角色管理
@@ -46,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/bind-role', [UserController::class, 'bindRole']);
         Route::get('/info', [UserController::class, 'info']);
         Route::put('/edit-pwd', [UserController::class, 'editPwd']);
+        Route::get('/roles', [UserController::class, 'roles']);
     });
 });
 

@@ -37,9 +37,11 @@ class RoleRequest extends BaseRequest
     }
 
     public $scenes = [
-        'create' => ['role_name', 'role_id'],
+        'edit' => ['role_name', 'role_id'],
+        'create' => ['role_name'],
         'change-rule' => ['role_id', 'rule_ids'],
-        'change-status' => ['role_ids']
+        'change-status' => ['role_ids'],
+        'user-bind-role' => ['role_ids']
     ];
 
     private function roleIdExists($enable): Exists

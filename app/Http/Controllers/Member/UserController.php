@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Member;
 use App\Exceptions\ApiException;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoleRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\UsersMiddleRoles;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,10 +16,26 @@ use Illuminate\Http\Request;
  */
 class UserController extends Controller
 {
-    public function bindRole(Request $request): JsonResponse
+    /**
+     * sync是同步覆盖，attach是新增
+     * @param RoleRequest $request
+     * @return JsonResponse
+     * @throws ApiException
+     */
+    public function bindRole(RoleRequest $request): JsonResponse
     {
-        $model = $request->user()->roles()->sync($request->post('role_ids'));
-        return ResponseHelper::auto($model);
+        $request->validate('user-bind-role');
+        $bindType = $request->get('bind-type', 'sync');
+        $roleIds = $request->post('role_ids');
+        $bool = true;
+        if ($bindType == 'attach') {
+            $middle = UsersMiddleRoles::query()->where('user_id', $request->user()->id)->pluck('role_id');
+            $roleIds = array_values(array_diff($roleIds, $middle->toArray()));
+        }
+        if ($roleIds) {
+            $bool = $request->user()->roles()->$bindType($roleIds);
+        }
+        return ResponseHelper::auto($bool);
     }
 
     public function info(Request $request): JsonResponse
@@ -39,5 +57,11 @@ class UserController extends Controller
             $request->user()->tokens()->delete();
         }
         return ResponseHelper::auto($bool);
+    }
+
+    public function roles(Request $request): JsonResponse
+    {
+        $user = $request->user()->with('roles')->first();
+        return ResponseHelper::success($user);
     }
 }

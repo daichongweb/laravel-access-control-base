@@ -38,7 +38,7 @@ class RoleController extends Controller
      */
     public function edit(RoleRequest $request): JsonResponse
     {
-        $request->validate('create');
+        $request->validate('edit');
         $role = $this->service->findById($request->post('role_id'));
         if (!$role) {
             throw new ApiException('角色不存在');
@@ -91,7 +91,7 @@ class RoleController extends Controller
 
     public function rules(Request $request): JsonResponse
     {
-        $rules = Role::query()->with('rules')->where('id', $request->get('role_id'))->select(['id', 'name', 'status'])->get();
+        $rules = Role::query()->with('rules')->where('id', $request->get('role_id'))->select(['id', 'name', 'status'])->first();
         return ResponseHelper::success($rules);
     }
 }
