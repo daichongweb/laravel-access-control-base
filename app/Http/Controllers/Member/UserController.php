@@ -27,7 +27,7 @@ class UserController extends Controller
     public function bindRole(RoleRequest $request): JsonResponse
     {
         $request->validate('user-bind-role');
-        $bindType = $request->get('bind-type', 'sync');
+        $bindType = $request->get('bind_type', 'sync');
         $roleIds = $request->post('role_ids');
         $bool = true;
         if ($bindType == 'attach') {

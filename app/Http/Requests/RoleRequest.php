@@ -15,6 +15,7 @@ class RoleRequest extends BaseRequest
             'role_id' => ['required', $this->roleIdExists(true)],
             'rule_ids' => ['required', 'array', $this->ruleIdExists()],
             'role_ids' => ['required', 'array', $this->roleIdExists(false)],
+            'bind_type' => ['required', Rule::in(['sync', 'attach']),]
         ];
     }
 
@@ -32,7 +33,9 @@ class RoleRequest extends BaseRequest
             'rule_ids.array' => '权限ID参数格式错误',
             'role_ids.required' => '角色ID不能为空',
             'role_ids.array' => '角色ID参数格式错误',
-            'role_ids.exists' => '角色不存在或已被禁用'
+            'role_ids.exists' => '角色不存在或已被禁用',
+            'bind_type.required' => '绑定类型不能为空',
+            'bind_type.in' => '绑定类型错误'
         ];
     }
 

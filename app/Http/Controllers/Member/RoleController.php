@@ -71,7 +71,7 @@ class RoleController extends Controller
     public function bindRule(RoleRequest $request): JsonResponse
     {
         $request->validate('change-rule');
-        return ResponseHelper::auto($this->service->addRule($request->post('role_id'), $request->post('rule_ids', [])));
+        return ResponseHelper::auto($this->service->addRule($request->post('role_id'), $request->post('rule_ids', []), $request->get('bind_type', 'sync')));
     }
 
     /**

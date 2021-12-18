@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Role;
+use App\Models\RolesMiddleRules;
 use App\Models\UsersMiddleRoles;
 use Illuminate\Support\Collection;
 
@@ -27,9 +28,13 @@ class RoleService
 
     /*******************添加/删除「角色与权限关系」********************/
 
-    public function addRule(int $roleId, array $ruleIds): bool
+    public function addRule(int $roleId, array $ruleIds, $bindType = 'sync'): bool
     {
-        return $this->changeRule($roleId, $ruleIds, 'sync');
+        if ($bindType == 'attach') {
+            $oldRuleIds = $this->getRuleIdsByRoleId($roleId);
+            $ruleIds = array_values(array_diff($ruleIds, $oldRuleIds->toArray()));
+        }
+        return $this->changeRule($roleId, $ruleIds, $bindType);
     }
 
     public function delRule(int $roleId, array $ruleIds): bool
@@ -54,5 +59,10 @@ class RoleService
     public function getRoleIdsByUserId($userId): Collection
     {
         return UsersMiddleRoles::query()->where('user_id', $userId)->pluck('role_id');
+    }
+
+    public function getRuleIdsByRoleId($roleId): Collection
+    {
+        return RolesMiddleRules::query()->where('role_id', $roleId)->pluck('rule_id');
     }
 }
