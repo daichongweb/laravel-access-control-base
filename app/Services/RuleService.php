@@ -27,7 +27,7 @@ class RuleService
 
     public function getRoutesByRoleIds($roleIds, $getTopCat = true): array
     {
-        $routes = [];
+        $routes = ['login:out'];
         $middles = RolesMiddleRules::query()->where('role_id', $roleIds)->get();
         if ($middles) {
             foreach ($middles as $middle) {
